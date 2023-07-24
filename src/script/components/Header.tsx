@@ -1,25 +1,8 @@
-import { NavLink, useLocation } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import { Menu } from 'antd';
 import { useEffect, useState } from 'react';
-
-const navLinksArr = [
-  {
-    label: (
-      <NavLink to="/" className="header__link">
-        Home
-      </NavLink>
-    ),
-    key: 'home',
-  },
-  {
-    label: (
-      <NavLink to="/route" className="header__link">
-        Taxi
-      </NavLink>
-    ),
-    key: 'route',
-  },
-];
+import { navLinksArr } from './navLinksArr';
+import { Logo } from './Logo';
 
 export const HeaderElem = () => {
   const location = useLocation();
@@ -34,11 +17,13 @@ export const HeaderElem = () => {
 
   return (
     <>
+      <Logo />
       <Menu
         mode="horizontal"
-        theme="dark"
+        // theme="dark"
         items={navLinksArr}
         selectedKeys={[navKeyFromPathName]}
+        style={{ justifyContent: 'flex-end' }}
       />
     </>
   );
