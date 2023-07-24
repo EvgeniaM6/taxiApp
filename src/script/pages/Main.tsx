@@ -1,3 +1,10 @@
+import { MapBlock } from '../components';
+
 export const Main = () => {
-  return <div>Choose route</div>;
+  return (
+    <>
+      <div>Choose route</div>
+      <MapBlock />
+    </>
+  );
 };

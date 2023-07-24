@@ -11,17 +11,18 @@ module.exports = (env, options) => {
       new HtmlWebpackPlugin({
         title: 'EvgeniaM6 - taxiApp',
         template: './src/index.html',
-        favicon: './src/favicon.ico'
+        favicon: './src/favicon.ico',
       }),
       new CleanWebpackPlugin(),
-      new EslintPlugin({extensions: 'tsx'}),
+      new EslintPlugin({ extensions: 'tsx' }),
     ],
-    devtool: isProduction ? false :  'inline-source-map',
+    devtool: isProduction ? false : 'inline-source-map',
     resolve: {
       extensions: ['.tsx', '.ts', '.js'],
     },
     devServer: {
       static: './dist',
+      historyApiFallback: true,
     },
     output: {
       filename: '[name].js',
@@ -42,11 +43,7 @@ module.exports = (env, options) => {
         },
         {
           test: /\.s?[ac]ss$/i,
-          use: [
-            "style-loader",
-            "css-loader",
-            "sass-loader",
-          ],
+          use: ['style-loader', 'css-loader', 'sass-loader'],
         },
         {
           test: /\.(?:ico|png|svg|jpg|jpeg|gif)$/i,
@@ -63,6 +60,6 @@ module.exports = (env, options) => {
         },
       ],
     },
-  }
+  };
   return config;
 };
