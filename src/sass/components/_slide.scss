@@ -1,0 +1,18 @@
+.slide {
+  height: 500px;
+
+  &__title {
+    color: #fff;
+    text-align: 'center';
+    background: transparentize($color: #6b6b6b8a, $amount: 0);
+    position: absolute;
+    padding: 20px;
+    border-bottom-right-radius: 20px;
+  }
+
+  &__image {
+    width: 100%;
+    object-fit: cover;
+    object-position: center;
+  }
+}

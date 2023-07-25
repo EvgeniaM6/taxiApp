@@ -1,3 +1,9 @@
+import { Slider } from '../components';
+
 export const Welcome = () => {
-  return <div>About us...</div>;
+  return (
+    <>
+      <Slider />
+    </>
+  );
 };

@@ -6,15 +6,9 @@ import { HeaderElem } from './components';
 
 const { Header, Content } = Layout;
 
-const headerStyleObj: React.CSSProperties = {
-  backgroundColor: '#fff',
-  display: 'flex',
-  justifyContent: 'space-between',
-};
-
 const contentStyleObj: React.CSSProperties = {
   backgroundColor: '#fff',
-  padding: '0 50px',
+  padding: '5px 50px 0',
 };
 
 export const App = () => {
@@ -28,7 +22,7 @@ export const App = () => {
         }}
       >
         <Layout>
-          <Header style={headerStyleObj}>
+          <Header className="header">
             <HeaderElem />
           </Header>
           <Content style={contentStyleObj}>
