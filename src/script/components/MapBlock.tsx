@@ -1,10 +1,11 @@
-import { LatLngExpression, LatLngTuple, LeafletEventHandlerFnMap, DivIcon } from 'leaflet';
+import { LatLngExpression, LeafletEventHandlerFnMap, DivIcon, LatLng } from 'leaflet';
 import { useState } from 'react';
 import { MapContainer, Marker, Popup, TileLayer } from 'react-leaflet';
 import { LocationMarker } from './LocationMarker';
 import { renderToString } from 'react-dom/server';
 import { EnvironmentFilled } from '@ant-design/icons';
 import { primaryAppColor } from '../../constants';
+import MapRouting from './MapRouting';
 
 const iconHtmlString = renderToString(
   <EnvironmentFilled style={{ color: primaryAppColor, transform: 'scale(3.5)' }} />
@@ -19,25 +20,36 @@ export const MapBlock = () => {
   const [position, setPosition] = useState<LatLngExpression | null>(null);
   const [startPoint, setStartPoint] = useState<LatLngExpression | null>(null);
   const [finishPoint, setFinishPoint] = useState<LatLngExpression | null>(null);
+  const [canBuildRoute, setCanBuildRoute] = useState(false);
+
+  const changeStartPosition = (newPosition: LatLngExpression): void => {
+    setPosition(newPosition);
+    setStartPoint(newPosition);
+  };
 
   const succ: PositionCallback = (pos) => {
-    const lat = pos.coords.latitude;
-    const lng = pos.coords.longitude;
-    const newPosition: LatLngExpression = [lat, lng];
+    const { latitude, longitude } = pos.coords;
+    const newPosition = new LatLng(latitude, longitude);
+
     if (!position) {
       setPosition(newPosition);
       return;
     }
-    const isSimilarPosition = (position as LatLngTuple)[0] === lat;
+
+    const { lat, lng } = position as LatLng;
+    const isSimilarPosition = lat === latitude && lng === longitude;
     if (isSimilarPosition) return;
-    setPosition(newPosition);
-    setStartPoint(newPosition);
+
+    changeStartPosition(newPosition);
   };
   navigator.geolocation.getCurrentPosition(succ);
 
   const dragLocation: LeafletEventHandlerFnMap = {
-    mouseup: (event) => {
-      setStartPoint(event.latlng);
+    mousedown: () => setCanBuildRoute(false),
+    mouseup: (event): void => {
+      const newPosition = event.latlng;
+      setStartPoint(newPosition);
+      setCanBuildRoute(true);
     },
   };
 
@@ -49,13 +61,32 @@ export const MapBlock = () => {
             attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
             url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
           />
-          <Marker position={position} draggable eventHandlers={dragLocation} icon={icon}>
-            <Popup>From</Popup>
-          </Marker>
-          <LocationMarker position={finishPoint} setPosition={setFinishPoint} />
+          {!startPoint && (
+            <Marker position={position} draggable eventHandlers={dragLocation} icon={icon}>
+              <Popup>From</Popup>
+            </Marker>
+          )}
+          {startPoint && (
+            <Marker position={startPoint} draggable eventHandlers={dragLocation} icon={icon}>
+              <Popup>From</Popup>
+            </Marker>
+          )}
+          <LocationMarker
+            position={finishPoint}
+            setPosition={setFinishPoint}
+            setCanBuildRoute={setCanBuildRoute}
+          />
+          {startPoint && finishPoint && canBuildRoute && (
+            <MapRouting
+              position="bottomright"
+              startPoint={startPoint}
+              finishPoint={finishPoint}
+              setStartPoint={setStartPoint}
+              setFinishPoint={setFinishPoint}
+            />
+          )}
         </MapContainer>
       )}
-      <EnvironmentFilled />
     </>
   );
 };

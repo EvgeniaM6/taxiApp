@@ -12,8 +12,9 @@ const icon: DivIcon = new DivIcon({ html: iconHtmlString });
 export const LocationMarker = (props: {
   position: LatLngExpression | null;
   setPosition: React.Dispatch<React.SetStateAction<LatLngExpression | null>>;
+  setCanBuildRoute: React.Dispatch<React.SetStateAction<boolean>>;
 }) => {
-  const { position, setPosition } = props;
+  const { position, setPosition, setCanBuildRoute } = props;
 
   const map = useMapEvents({
     click(e) {
@@ -23,8 +24,10 @@ export const LocationMarker = (props: {
   });
 
   const dragLocation: LeafletEventHandlerFnMap = {
+    mousedown: () => setCanBuildRoute(false),
     mouseup: (event) => {
       setPosition(event.latlng);
+      setCanBuildRoute(true);
     },
   };
 
