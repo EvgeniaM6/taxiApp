@@ -18,9 +18,9 @@ export const LocationMarker = (props: {
 }) => {
   const { position, setPosition, setCanBuildRoute } = props;
 
-  const map = useMapEvents({
-    click(e) {
-      map.locate();
+  useMapEvents({
+    dblclick(e) {
+      if (position) return;
       setPosition(e.latlng);
     },
   });

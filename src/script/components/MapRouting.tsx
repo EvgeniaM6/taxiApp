@@ -1,6 +1,7 @@
 import L, { ControlOptions, LatLng, LatLngExpression } from 'leaflet';
 import { createControlComponent } from '@react-leaflet/core';
 import 'leaflet-routing-machine';
+import { geocoders } from 'leaflet-control-geocoder';
 import { secondaryAppColor } from '../../constants';
 
 export interface TWaypointsProps extends ControlOptions {
@@ -37,6 +38,7 @@ const createRoutineMachineLayer = (props: TWaypointsProps) => {
     routeWhileDragging: true,
     fitSelectedRoutes: true,
     showAlternatives: false,
+    geocoder: new geocoders.Nominatim(),
   }).on('waypointschanged', changeWaypoints);
 
   return instance;

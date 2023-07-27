@@ -64,24 +64,12 @@ export const MapBlock = () => {
             url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
           />
           {!startPoint && (
-            <Marker
-              position={position}
-              draggable
-              eventHandlers={dragLocation}
-              icon={icon}
-              opacity={1}
-            >
-              <Popup>From</Popup>
+            <Marker position={position} draggable eventHandlers={dragLocation} icon={icon}>
+              <Popup>You are here</Popup>
             </Marker>
           )}
           {startPoint && (
-            <Marker
-              position={startPoint}
-              draggable
-              eventHandlers={dragLocation}
-              icon={icon}
-              opacity={1}
-            >
+            <Marker position={startPoint} draggable eventHandlers={dragLocation} icon={icon}>
               <Popup>From</Popup>
             </Marker>
           )}
