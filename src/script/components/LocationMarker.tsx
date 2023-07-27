@@ -5,7 +5,9 @@ import { renderToString } from 'react-dom/server';
 import { secondaryAppColor } from '../../constants';
 
 const iconHtmlString = renderToString(
-  <EnvironmentFilled style={{ color: secondaryAppColor, transform: 'scale(3.5)' }} />
+  <EnvironmentFilled
+    style={{ color: secondaryAppColor, transform: 'translate(0px, -25px) scale(3.5)' }}
+  />
 );
 const icon: DivIcon = new DivIcon({ html: iconHtmlString });
 
@@ -32,7 +34,7 @@ export const LocationMarker = (props: {
   };
 
   return position === null ? null : (
-    <Marker position={position} draggable icon={icon} eventHandlers={dragLocation}>
+    <Marker position={position} draggable icon={icon} eventHandlers={dragLocation} opacity={1}>
       <Popup>To</Popup>
     </Marker>
   );

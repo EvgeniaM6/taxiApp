@@ -1,4 +1,12 @@
 .leaflet-marker-icon {
   background: none;
   border: none;
+
+  &:not(.leaflet-div-icon) {
+    opacity: 0;
+  }
+}
+
+.leaflet-shadow-pane {
+  opacity: 0;
 }

@@ -8,7 +8,9 @@ import { primaryAppColor } from '../../constants';
 import MapRouting from './MapRouting';
 
 const iconHtmlString = renderToString(
-  <EnvironmentFilled style={{ color: primaryAppColor, transform: 'scale(3.5)' }} />
+  <EnvironmentFilled
+    style={{ color: primaryAppColor, transform: 'translate(0px, -25px) scale(3.5)' }}
+  />
 );
 const icon: DivIcon = new DivIcon({ html: iconHtmlString });
 
@@ -62,12 +64,24 @@ export const MapBlock = () => {
             url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
           />
           {!startPoint && (
-            <Marker position={position} draggable eventHandlers={dragLocation} icon={icon}>
+            <Marker
+              position={position}
+              draggable
+              eventHandlers={dragLocation}
+              icon={icon}
+              opacity={1}
+            >
               <Popup>From</Popup>
             </Marker>
           )}
           {startPoint && (
-            <Marker position={startPoint} draggable eventHandlers={dragLocation} icon={icon}>
+            <Marker
+              position={startPoint}
+              draggable
+              eventHandlers={dragLocation}
+              icon={icon}
+              opacity={1}
+            >
               <Popup>From</Popup>
             </Marker>
           )}
@@ -78,7 +92,6 @@ export const MapBlock = () => {
           />
           {startPoint && finishPoint && canBuildRoute && (
             <MapRouting
-              position="bottomright"
               startPoint={startPoint}
               finishPoint={finishPoint}
               setStartPoint={setStartPoint}
