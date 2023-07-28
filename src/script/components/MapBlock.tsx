@@ -1,11 +1,12 @@
 import { LatLngExpression, LeafletEventHandlerFnMap, DivIcon, LatLng } from 'leaflet';
 import { useState } from 'react';
 import { MapContainer, Marker, Popup, TileLayer } from 'react-leaflet';
-import { LocationMarker } from './LocationMarker';
+import { FinishPointMarker } from './FinishPointMarker';
 import { renderToString } from 'react-dom/server';
 import { EnvironmentFilled } from '@ant-design/icons';
 import { primaryAppColor } from '../../constants';
 import MapRouting from './MapRouting';
+import { LocationPopup } from './LocationPopup';
 
 const iconHtmlString = renderToString(
   <EnvironmentFilled
@@ -64,16 +65,21 @@ export const MapBlock = () => {
             url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
           />
           {!startPoint && (
-            <Marker position={position} draggable eventHandlers={dragLocation} icon={icon}>
-              <Popup>You are here</Popup>
-            </Marker>
+            <>
+              <Marker position={position} icon={icon} />
+              <LocationPopup
+                position={position}
+                setStartPoint={setStartPoint}
+                setCanBuildRoute={setCanBuildRoute}
+              />
+            </>
           )}
           {startPoint && (
             <Marker position={startPoint} draggable eventHandlers={dragLocation} icon={icon}>
               <Popup>From</Popup>
             </Marker>
           )}
-          <LocationMarker
+          <FinishPointMarker
             position={finishPoint}
             setPosition={setFinishPoint}
             setCanBuildRoute={setCanBuildRoute}
