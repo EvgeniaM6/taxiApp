@@ -11,7 +11,7 @@ const iconHtmlString = renderToString(
 );
 const icon: DivIcon = new DivIcon({ html: iconHtmlString });
 
-export const LocationMarker = (props: {
+export const FinishPointMarker = (props: {
   position: LatLngExpression | null;
   setPosition: React.Dispatch<React.SetStateAction<LatLngExpression | null>>;
   setCanBuildRoute: React.Dispatch<React.SetStateAction<boolean>>;
