@@ -1,19 +1,11 @@
-import L, { ControlOptions } from 'leaflet';
+import L from 'leaflet';
 import { createControlComponent } from '@react-leaflet/core';
 import 'leaflet-routing-machine';
 import { geocoders } from 'leaflet-control-geocoder';
 import { primaryAppColor } from '../../constants';
-import { TLatLng } from '../models';
+import { IWaypointsProps } from '../models';
 
-export interface TWaypointsProps extends ControlOptions {
-  startPoint: TLatLng;
-  finishPoint: TLatLng;
-  changeDistanceInKm: (distance: number) => void;
-  changeStartPoint: (lat: number, lng: number) => void;
-  changeFinishPoint: (lat: number, lng: number) => void;
-}
-
-const createRoutineMachineLayer = (props: TWaypointsProps): L.Routing.Control => {
+const createRoutineMachineLayer = (props: IWaypointsProps): L.Routing.Control => {
   const { startPoint, finishPoint, changeDistanceInKm, changeStartPoint, changeFinishPoint } =
     props;
 

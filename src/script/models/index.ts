@@ -1,3 +1,3 @@
-import { TLatLng, TRouteState } from './route.model';
+import { IWaypointsProps, TLatLng, TRouteState } from './route.model';
 
-export { TRouteState, TLatLng };
+export { TRouteState, TLatLng, IWaypointsProps };

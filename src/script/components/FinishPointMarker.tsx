@@ -1,5 +1,5 @@
 import { EnvironmentFilled } from '@ant-design/icons';
-import { DivIcon, LeafletEventHandlerFnMap } from 'leaflet';
+import { DivIcon, LeafletEventHandlerFnMap, LeafletMouseEvent } from 'leaflet';
 import { Marker, Popup, useMapEvents } from 'react-leaflet';
 import { renderToString } from 'react-dom/server';
 import { secondaryAppColor } from '../../constants';
@@ -29,8 +29,8 @@ export const FinishPointMarker = (props: {
   });
 
   const dragLocation: LeafletEventHandlerFnMap = {
-    mousedown: () => setCanBuildRoute(false),
-    mouseup: (event) => {
+    mousedown: (): void => setCanBuildRoute(false),
+    mouseup: (event: LeafletMouseEvent) => {
       const { lat, lng } = event.latlng;
       dispatch(setFinishPoint({ lat, lng }));
       setCanBuildRoute(true);

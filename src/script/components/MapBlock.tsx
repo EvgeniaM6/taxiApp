@@ -1,4 +1,10 @@
-import { LatLngExpression, LeafletEventHandlerFnMap, DivIcon, LatLng } from 'leaflet';
+import {
+  LatLngExpression,
+  LeafletEventHandlerFnMap,
+  DivIcon,
+  LatLng,
+  LeafletMouseEvent,
+} from 'leaflet';
 import { useState } from 'react';
 import { MapContainer, Marker, Popup, TileLayer } from 'react-leaflet';
 import { FinishPointMarker } from './FinishPointMarker';
@@ -51,10 +57,9 @@ export const MapBlock = () => {
   navigator.geolocation.getCurrentPosition(succ);
 
   const dragLocation: LeafletEventHandlerFnMap = {
-    mousedown: () => setCanBuildRoute(false),
-    mouseup: (event): void => {
-      const newPosition = event.latlng;
-      const { lat, lng } = newPosition;
+    mousedown: (): void => setCanBuildRoute(false),
+    mouseup: (event: LeafletMouseEvent): void => {
+      const { lat, lng } = event.latlng;
       dispatch(setStartPoint({ lat, lng }));
       setCanBuildRoute(true);
     },
