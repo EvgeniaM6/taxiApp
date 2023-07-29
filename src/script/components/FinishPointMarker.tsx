@@ -1,8 +1,10 @@
 import { EnvironmentFilled } from '@ant-design/icons';
-import { DivIcon, LatLngExpression, LeafletEventHandlerFnMap } from 'leaflet';
+import { DivIcon, LeafletEventHandlerFnMap } from 'leaflet';
 import { Marker, Popup, useMapEvents } from 'react-leaflet';
 import { renderToString } from 'react-dom/server';
 import { secondaryAppColor } from '../../constants';
+import { useAppDispatch, useAppSelector } from '../hooks';
+import { setFinishPoint } from '../store/routeSlice';
 
 const iconHtmlString = renderToString(
   <EnvironmentFilled
@@ -12,29 +14,31 @@ const iconHtmlString = renderToString(
 const icon: DivIcon = new DivIcon({ html: iconHtmlString });
 
 export const FinishPointMarker = (props: {
-  position: LatLngExpression | null;
-  setPosition: React.Dispatch<React.SetStateAction<LatLngExpression | null>>;
   setCanBuildRoute: React.Dispatch<React.SetStateAction<boolean>>;
 }) => {
-  const { position, setPosition, setCanBuildRoute } = props;
+  const { setCanBuildRoute } = props;
+  const { finishPoint } = useAppSelector((state) => state.route);
+  const dispatch = useAppDispatch();
 
   useMapEvents({
     dblclick(e) {
-      if (position) return;
-      setPosition(e.latlng);
+      if (finishPoint) return;
+      const { lat, lng } = e.latlng;
+      dispatch(setFinishPoint({ lat, lng }));
     },
   });
 
   const dragLocation: LeafletEventHandlerFnMap = {
     mousedown: () => setCanBuildRoute(false),
     mouseup: (event) => {
-      setPosition(event.latlng);
+      const { lat, lng } = event.latlng;
+      dispatch(setFinishPoint({ lat, lng }));
       setCanBuildRoute(true);
     },
   };
 
-  return position === null ? null : (
-    <Marker position={position} draggable icon={icon} eventHandlers={dragLocation} opacity={1}>
+  return finishPoint === null ? null : (
+    <Marker position={finishPoint} draggable icon={icon} eventHandlers={dragLocation} opacity={1}>
       <Popup>To</Popup>
     </Marker>
   );

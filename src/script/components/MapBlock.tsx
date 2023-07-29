@@ -4,9 +4,11 @@ import { MapContainer, Marker, Popup, TileLayer } from 'react-leaflet';
 import { FinishPointMarker } from './FinishPointMarker';
 import { renderToString } from 'react-dom/server';
 import { EnvironmentFilled } from '@ant-design/icons';
-import { primaryAppColor } from '../../constants';
+import { metersInKm, primaryAppColor } from '../../constants';
 import MapRouting from './MapRouting';
 import { LocationPopup } from './LocationPopup';
+import { useAppDispatch, useAppSelector } from '../hooks';
+import { setDistanceInKms, setFinishPoint, setStartPoint } from '../store/routeSlice';
 
 const iconHtmlString = renderToString(
   <EnvironmentFilled
@@ -20,14 +22,15 @@ export const MapBlock = () => {
     height: '500px',
   };
 
+  const { startPoint, finishPoint } = useAppSelector((state) => state.route);
+  const dispatch = useAppDispatch();
   const [position, setPosition] = useState<LatLngExpression | null>(null);
-  const [startPoint, setStartPoint] = useState<LatLngExpression | null>(null);
-  const [finishPoint, setFinishPoint] = useState<LatLngExpression | null>(null);
-  const [canBuildRoute, setCanBuildRoute] = useState(false);
+  const [canBuildRoute, setCanBuildRoute] = useState(!!startPoint && !!finishPoint);
 
   const changeStartPosition = (newPosition: LatLngExpression): void => {
     setPosition(newPosition);
-    setStartPoint(newPosition);
+    const { lat, lng } = newPosition as LatLng;
+    dispatch(setStartPoint({ lat, lng }));
   };
 
   const succ: PositionCallback = (pos) => {
@@ -51,9 +54,22 @@ export const MapBlock = () => {
     mousedown: () => setCanBuildRoute(false),
     mouseup: (event): void => {
       const newPosition = event.latlng;
-      setStartPoint(newPosition);
+      const { lat, lng } = newPosition;
+      dispatch(setStartPoint({ lat, lng }));
       setCanBuildRoute(true);
     },
+  };
+
+  const changeDistanceInKm = (distance: number): void => {
+    dispatch(setDistanceInKms(distance / metersInKm));
+  };
+
+  const changeStartPoint = (lat: number, lng: number): void => {
+    dispatch(setStartPoint({ lat, lng }));
+  };
+
+  const changeFinishPoint = (lat: number, lng: number): void => {
+    dispatch(setFinishPoint({ lat, lng }));
   };
 
   return (
@@ -67,11 +83,7 @@ export const MapBlock = () => {
           {!startPoint && (
             <>
               <Marker position={position} icon={icon} />
-              <LocationPopup
-                position={position}
-                setStartPoint={setStartPoint}
-                setCanBuildRoute={setCanBuildRoute}
-              />
+              <LocationPopup position={position} setCanBuildRoute={setCanBuildRoute} />
             </>
           )}
           {startPoint && (
@@ -79,17 +91,14 @@ export const MapBlock = () => {
               <Popup>From</Popup>
             </Marker>
           )}
-          <FinishPointMarker
-            position={finishPoint}
-            setPosition={setFinishPoint}
-            setCanBuildRoute={setCanBuildRoute}
-          />
+          <FinishPointMarker setCanBuildRoute={setCanBuildRoute} />
           {startPoint && finishPoint && canBuildRoute && (
             <MapRouting
               startPoint={startPoint}
               finishPoint={finishPoint}
-              setStartPoint={setStartPoint}
-              setFinishPoint={setFinishPoint}
+              changeDistanceInKm={changeDistanceInKm}
+              changeStartPoint={changeStartPoint}
+              changeFinishPoint={changeFinishPoint}
             />
           )}
         </MapContainer>

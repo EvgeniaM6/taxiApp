@@ -1,24 +1,29 @@
-import L, { ControlOptions, LatLng, LatLngExpression } from 'leaflet';
+import L, { ControlOptions } from 'leaflet';
 import { createControlComponent } from '@react-leaflet/core';
 import 'leaflet-routing-machine';
 import { geocoders } from 'leaflet-control-geocoder';
-import { metersInKm, primaryAppColor } from '../../constants';
-import { useAppDispatch } from '../hooks';
-import { setDistanceInKms } from '../store/routeSlice';
+import { primaryAppColor } from '../../constants';
+import { TLatLng } from '../models';
 
 export interface TWaypointsProps extends ControlOptions {
-  startPoint: LatLngExpression;
-  finishPoint: LatLngExpression;
-  setStartPoint: React.Dispatch<React.SetStateAction<LatLngExpression | null>>;
-  setFinishPoint: React.Dispatch<React.SetStateAction<LatLngExpression | null>>;
+  startPoint: TLatLng;
+  finishPoint: TLatLng;
+  changeDistanceInKm: (distance: number) => void;
+  changeStartPoint: (lat: number, lng: number) => void;
+  changeFinishPoint: (lat: number, lng: number) => void;
 }
 
 const createRoutineMachineLayer = (props: TWaypointsProps): L.Routing.Control => {
-  const dispatch = useAppDispatch();
+  const { startPoint, finishPoint, changeDistanceInKm, changeStartPoint, changeFinishPoint } =
+    props;
 
-  const { startPoint, finishPoint, setStartPoint, setFinishPoint } = props;
-  const { lat: startLat, lng: startLng } = startPoint as LatLng;
-  const { lat: finishLat, lng: finishLng } = finishPoint as LatLng;
+  if (!startPoint || !finishPoint) {
+    const instance = L.Routing.control();
+    return instance;
+  }
+
+  const { lat: startLat, lng: startLng } = startPoint;
+  const { lat: finishLat, lng: finishLng } = finishPoint;
 
   const changeWaypoints = (e: L.Routing.RoutingEvent): void => {
     const { waypoints } = e;
@@ -26,15 +31,15 @@ const createRoutineMachineLayer = (props: TWaypointsProps): L.Routing.Control =>
     const newStartLatLng = newStartWaypoint.latLng;
     const newFinishLatLng = newFinishWaypoint.latLng;
 
-    setStartPoint(newStartLatLng);
-    setFinishPoint(newFinishLatLng);
+    changeStartPoint(newStartLatLng.lat, newStartLatLng.lng);
+    changeFinishPoint(newFinishLatLng.lat, newFinishLatLng.lng);
   };
 
   const calculateDistance = (e: L.Routing.RoutingResultEvent): void => {
     const { summary } = e.routes[0];
     if (!summary) return;
     const { totalDistance } = summary;
-    dispatch(setDistanceInKms(totalDistance / metersInKm));
+    changeDistanceInKm(totalDistance);
   };
 
   const instance = L.Routing.control({
