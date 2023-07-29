@@ -5,13 +5,21 @@ import { convertSumToStr } from '../utils';
 import { setFinishPoint, setStartPoint } from '../store/routeSlice';
 
 export const FormRoute = () => {
-  const { distanceInKms } = useAppSelector((state) => state.route);
+  const { distanceInKms, startPoint, finishPoint } = useAppSelector((state) => state.route);
   const dispatch = useAppDispatch();
   const { Paragraph } = Typography;
 
   const resetRoute = (): void => {
     dispatch(setStartPoint(null));
     dispatch(setFinishPoint(null));
+  };
+
+  const reverseRoute = (): void => {
+    const newStartPoint = finishPoint;
+    const newFinishPoint = startPoint;
+    resetRoute();
+    dispatch(setStartPoint(newStartPoint));
+    dispatch(setFinishPoint(newFinishPoint));
   };
 
   return (
@@ -44,6 +52,9 @@ export const FormRoute = () => {
       </Form>
       <Button type="default" onClick={resetRoute}>
         Reset the route
+      </Button>
+      <Button type="default" disabled={!startPoint || !finishPoint} onClick={reverseRoute}>
+        Reverse the route
       </Button>
     </>
   );
