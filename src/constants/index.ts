@@ -1,4 +1,4 @@
 import { primaryAppColor, secondaryAppColor } from './styleConstants';
-import { metersInKm, priceUsdPerKm } from './taxiPrices';
+import { currencyExchUahInUsd, metersInKm, priceUsdPerKm } from './taxiPrices';
 
-export { primaryAppColor, secondaryAppColor, priceUsdPerKm, metersInKm };
+export { primaryAppColor, secondaryAppColor, priceUsdPerKm, metersInKm, currencyExchUahInUsd };

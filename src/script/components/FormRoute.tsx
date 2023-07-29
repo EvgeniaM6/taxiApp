@@ -1,11 +1,18 @@
 import { Button, Form, Typography } from 'antd';
-import { useAppSelector } from '../hooks';
-import { priceUsdPerKm } from '../../constants';
+import { useAppDispatch, useAppSelector } from '../hooks';
+import { currencyExchUahInUsd, priceUsdPerKm } from '../../constants';
 import { convertSumToStr } from '../utils';
+import { setFinishPoint, setStartPoint } from '../store/routeSlice';
 
 export const FormRoute = () => {
   const { distanceInKms } = useAppSelector((state) => state.route);
+  const dispatch = useAppDispatch();
   const { Paragraph } = Typography;
+
+  const resetRoute = (): void => {
+    dispatch(setStartPoint(null));
+    dispatch(setFinishPoint(null));
+  };
 
   return (
     <>
@@ -24,7 +31,9 @@ export const FormRoute = () => {
         </Form.Item> */}
         <Paragraph>
           {distanceInKms
-            ? `${convertSumToStr(Math.round(distanceInKms * priceUsdPerKm * 30))} UAH`
+            ? `${convertSumToStr(
+                Math.round(distanceInKms * priceUsdPerKm * currencyExchUahInUsd)
+              )} UAH`
             : `Build your roote, please`}
         </Paragraph>
         <Form.Item wrapperCol={{ offset: 2 }}>
@@ -33,6 +42,9 @@ export const FormRoute = () => {
           </Button>
         </Form.Item>
       </Form>
+      <Button type="default" onClick={resetRoute}>
+        Reset the route
+      </Button>
     </>
   );
 };
