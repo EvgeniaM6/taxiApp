@@ -1,8 +1,11 @@
 import { Button, Form, Typography } from 'antd';
 import { useAppDispatch, useAppSelector } from '../hooks';
 import { currencyExchUahInUsd, priceUsdPerKm } from '../../constants';
-import { convertSumToStr } from '../utils';
+import { convertSumToStr, fetchGeocode } from '../utils';
 import { setFinishPoint, setStartPoint } from '../store/routeSlice';
+import { useState } from 'react';
+import { GeocodeSelect } from './GeocodeSelect';
+import { IGeocodeValue, TLatLng } from '../models';
 
 export const FormRoute = () => {
   const { distanceInKms, startPoint, finishPoint } = useAppSelector((state) => state.route);
@@ -22,21 +25,50 @@ export const FormRoute = () => {
     dispatch(setFinishPoint(newFinishPoint));
   };
 
+  const setNewStartPoint = (newPoint: TLatLng | null): void => {
+    dispatch(setStartPoint(newPoint));
+  };
+
+  const setNewFinishPoint = (newPoint: TLatLng | null): void => {
+    dispatch(setFinishPoint(newPoint));
+  };
+
+  const [valueStart, setValueStart] = useState<IGeocodeValue[]>([]);
+  const [valueFinish, setValueFinish] = useState<IGeocodeValue[]>([]);
+
   return (
     <>
       <Form labelCol={{ span: 2 }} wrapperCol={{ xs: { span: 16 }, lg: { span: 8 } }}>
-        {/* <Form.Item
+        <Form.Item
           label="From"
           rules={[{ required: true, message: 'Please input your point of departure!' }]}
         >
-          <Input />
+          <GeocodeSelect
+            value={valueStart}
+            placeholder="Enter point of departure"
+            fetchOptions={fetchGeocode}
+            onChange={(newValue) => {
+              setValueStart(newValue as IGeocodeValue[]);
+            }}
+            style={{ width: '100%' }}
+            setPoint={setNewStartPoint}
+          />
         </Form.Item>
         <Form.Item
           label="To"
           rules={[{ required: true, message: 'Please input your destination!' }]}
         >
-          <Input />
-        </Form.Item> */}
+          <GeocodeSelect
+            value={valueFinish}
+            placeholder="Enter point of departure"
+            fetchOptions={fetchGeocode}
+            onChange={(newValue) => {
+              setValueFinish(newValue as IGeocodeValue[]);
+            }}
+            style={{ width: '100%' }}
+            setPoint={setNewFinishPoint}
+          />
+        </Form.Item>
         <Paragraph>
           {distanceInKms
             ? `${convertSumToStr(
