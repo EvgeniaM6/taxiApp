@@ -7,10 +7,20 @@ export type TLatLng = {
   lng: number;
 };
 
+export type TCarClassObj = {
+  title: string;
+  priceUsdPerKm: number;
+};
+
+export type TCarClassesObj = {
+  [key: string]: TCarClassObj;
+};
+
 export type TRouteState = {
   distanceInKms: number;
   startPoint: TLatLng | null;
   finishPoint: TLatLng | null;
+  carClass: string;
 };
 
 export interface IWaypointsProps extends ControlOptions {

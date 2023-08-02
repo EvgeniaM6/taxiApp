@@ -1,25 +1,26 @@
-import { Button, Form, Typography } from 'antd';
+import { Button, Form } from 'antd';
 import { useAppDispatch, useAppSelector } from '../hooks';
-import { currencyExchUahInUsd, priceUsdPerKm } from '../../constants';
-import { convertSumToStr, fetchGeocode } from '../utils';
-import { setFinishPoint, setStartPoint } from '../store/routeSlice';
+import { fetchGeocode } from '../utils';
+import { setFinishPoint, setStartPoint, setDistanceInKms } from '../store/routeSlice';
 import { useEffect, useState } from 'react';
 import { GeocodeSelect } from './GeocodeSelect';
 import { IGeocodeValue, TLatLng } from '../models';
 import { geocoders } from 'leaflet-control-geocoder';
 import { LatLngLiteral } from 'leaflet';
 import { GeocodingResult } from 'leaflet-control-geocoder/dist/geocoders';
+import { CarClassChoice } from './CarClassChoice';
+import { RouteCost } from './RouteCost';
 
 const geocoder = new geocoders.Nominatim();
 
 export const FormRoute = () => {
-  const { distanceInKms, startPoint, finishPoint } = useAppSelector((state) => state.route);
+  const { startPoint, finishPoint } = useAppSelector((state) => state.route);
   const dispatch = useAppDispatch();
-  const { Paragraph } = Typography;
 
   const resetRoute = (): void => {
     dispatch(setStartPoint(null));
     dispatch(setFinishPoint(null));
+    dispatch(setDistanceInKms(0));
   };
 
   const reverseRoute = (): void => {
@@ -74,6 +75,9 @@ export const FormRoute = () => {
   return (
     <>
       <Form labelCol={{ span: 2 }} wrapperCol={{ xs: { span: 16 }, lg: { span: 8 } }}>
+        <Form.Item label="Car class">
+          <CarClassChoice />
+        </Form.Item>
         <Form.Item
           label="From"
           rules={[{ required: true, message: 'Please input your point of departure!' }]}
@@ -104,13 +108,7 @@ export const FormRoute = () => {
             setPoint={setNewFinishPoint}
           />
         </Form.Item>
-        <Paragraph>
-          {distanceInKms
-            ? `${convertSumToStr(
-                Math.round(distanceInKms * priceUsdPerKm * currencyExchUahInUsd)
-              )} UAH`
-            : `Build your roote, please`}
-        </Paragraph>
+        <RouteCost />
         <Form.Item wrapperCol={{ offset: 2 }}>
           <Button type="primary" htmlType="submit">
             Order a taxi
