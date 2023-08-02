@@ -23,17 +23,10 @@ export function GeocodeSelect<
         if (fetchId !== fetchRef.current) {
           return;
         }
-        const result = newOptions.map((resultObj: GeocodingResult) => {
-          const {
-            name,
-            properties: { place_id },
-          } = resultObj;
-
-          return {
-            label: name,
-            value: place_id,
-          };
-        });
+        const result = newOptions.map((resultObj: GeocodingResult) => ({
+          label: resultObj.name,
+          value: resultObj.properties.place_id,
+        }));
 
         setOptions(result as ValueType[]);
         setGeocodeResults(newOptions);

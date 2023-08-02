@@ -3,9 +3,14 @@ import { useAppDispatch, useAppSelector } from '../hooks';
 import { currencyExchUahInUsd, priceUsdPerKm } from '../../constants';
 import { convertSumToStr, fetchGeocode } from '../utils';
 import { setFinishPoint, setStartPoint } from '../store/routeSlice';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { GeocodeSelect } from './GeocodeSelect';
 import { IGeocodeValue, TLatLng } from '../models';
+import { geocoders } from 'leaflet-control-geocoder';
+import { LatLngLiteral } from 'leaflet';
+import { GeocodingResult } from 'leaflet-control-geocoder/dist/geocoders';
+
+const geocoder = new geocoders.Nominatim();
 
 export const FormRoute = () => {
   const { distanceInKms, startPoint, finishPoint } = useAppSelector((state) => state.route);
@@ -35,6 +40,36 @@ export const FormRoute = () => {
 
   const [valueStart, setValueStart] = useState<IGeocodeValue[]>([]);
   const [valueFinish, setValueFinish] = useState<IGeocodeValue[]>([]);
+
+  useEffect(() => {
+    if (startPoint) {
+      geocoder.reverse(startPoint as LatLngLiteral, 1, (resultsArr) => {
+        const geocodeValuesArr = resultsArr.map((resultObj: GeocodingResult) => ({
+          label: resultObj.name,
+          value: resultObj.properties.place_id,
+        }));
+
+        setValueStart(geocodeValuesArr);
+      });
+    } else {
+      setValueStart([]);
+    }
+  }, [startPoint]);
+
+  useEffect(() => {
+    if (finishPoint) {
+      geocoder.reverse(finishPoint as LatLngLiteral, 1, (resultsArr) => {
+        const geocodeValuesArr = resultsArr.map((resultObj: GeocodingResult) => ({
+          label: resultObj.name,
+          value: resultObj.properties.place_id,
+        }));
+
+        setValueFinish(geocodeValuesArr);
+      });
+    } else {
+      setValueFinish([]);
+    }
+  }, [finishPoint]);
 
   return (
     <>
