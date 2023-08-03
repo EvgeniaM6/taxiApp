@@ -1,13 +1,25 @@
-import { LatLngExpression, LatLngTuple, LeafletEventHandlerFnMap, DivIcon } from 'leaflet';
+import {
+  LatLngExpression,
+  LeafletEventHandlerFnMap,
+  DivIcon,
+  LatLng,
+  LeafletMouseEvent,
+} from 'leaflet';
 import { useState } from 'react';
 import { MapContainer, Marker, Popup, TileLayer } from 'react-leaflet';
-import { LocationMarker } from './LocationMarker';
+import { FinishPointMarker } from './FinishPointMarker';
 import { renderToString } from 'react-dom/server';
 import { EnvironmentFilled } from '@ant-design/icons';
-import { primaryAppColor } from '../../constants';
+import { metersInKm, primaryAppColor } from '../../constants';
+import MapRouting from './MapRouting';
+import { LocationPopup } from './LocationPopup';
+import { useAppDispatch, useAppSelector } from '../hooks';
+import { setDistanceInKms, setFinishPoint, setStartPoint } from '../store/routeSlice';
 
 const iconHtmlString = renderToString(
-  <EnvironmentFilled style={{ color: primaryAppColor, transform: 'scale(3.5)' }} />
+  <EnvironmentFilled
+    style={{ color: primaryAppColor, transform: 'translate(0px, -25px) scale(3.5)' }}
+  />
 );
 const icon: DivIcon = new DivIcon({ html: iconHtmlString });
 
@@ -16,29 +28,53 @@ export const MapBlock = () => {
     height: '500px',
   };
 
+  const { startPoint, finishPoint } = useAppSelector((state) => state.route);
+  const dispatch = useAppDispatch();
   const [position, setPosition] = useState<LatLngExpression | null>(null);
-  const [startPoint, setStartPoint] = useState<LatLngExpression | null>(null);
-  const [finishPoint, setFinishPoint] = useState<LatLngExpression | null>(null);
+  const [canBuildRoute, setCanBuildRoute] = useState(!!startPoint && !!finishPoint);
+
+  const changeStartPosition = (newPosition: LatLngExpression): void => {
+    setPosition(newPosition);
+    const { lat, lng } = newPosition as LatLng;
+    dispatch(setStartPoint({ lat, lng }));
+  };
 
   const succ: PositionCallback = (pos) => {
-    const lat = pos.coords.latitude;
-    const lng = pos.coords.longitude;
-    const newPosition: LatLngExpression = [lat, lng];
+    const { latitude, longitude } = pos.coords;
+    const newPosition = new LatLng(latitude, longitude);
+
     if (!position) {
       setPosition(newPosition);
       return;
     }
-    const isSimilarPosition = (position as LatLngTuple)[0] === lat;
+
+    const { lat, lng } = position as LatLng;
+    const isSimilarPosition = lat === latitude && lng === longitude;
     if (isSimilarPosition) return;
-    setPosition(newPosition);
-    setStartPoint(newPosition);
+
+    changeStartPosition(newPosition);
   };
   navigator.geolocation.getCurrentPosition(succ);
 
   const dragLocation: LeafletEventHandlerFnMap = {
-    mouseup: (event) => {
-      setStartPoint(event.latlng);
+    mousedown: (): void => setCanBuildRoute(false),
+    mouseup: (event: LeafletMouseEvent): void => {
+      const { lat, lng } = event.latlng;
+      dispatch(setStartPoint({ lat, lng }));
+      setCanBuildRoute(true);
     },
+  };
+
+  const changeDistanceInKm = (distance: number): void => {
+    dispatch(setDistanceInKms(distance / metersInKm));
+  };
+
+  const changeStartPoint = (lat: number, lng: number): void => {
+    dispatch(setStartPoint({ lat, lng }));
+  };
+
+  const changeFinishPoint = (lat: number, lng: number): void => {
+    dispatch(setFinishPoint({ lat, lng }));
   };
 
   return (
@@ -49,13 +85,29 @@ export const MapBlock = () => {
             attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
             url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
           />
-          <Marker position={position} draggable eventHandlers={dragLocation} icon={icon}>
-            <Popup>From</Popup>
-          </Marker>
-          <LocationMarker position={finishPoint} setPosition={setFinishPoint} />
+          {!startPoint && (
+            <>
+              <Marker position={position} icon={icon} />
+              <LocationPopup position={position} setCanBuildRoute={setCanBuildRoute} />
+            </>
+          )}
+          {startPoint && (
+            <Marker position={startPoint} draggable eventHandlers={dragLocation} icon={icon}>
+              <Popup>From</Popup>
+            </Marker>
+          )}
+          <FinishPointMarker setCanBuildRoute={setCanBuildRoute} />
+          {startPoint && finishPoint && canBuildRoute && (
+            <MapRouting
+              startPoint={startPoint}
+              finishPoint={finishPoint}
+              changeDistanceInKm={changeDistanceInKm}
+              changeStartPoint={changeStartPoint}
+              changeFinishPoint={changeFinishPoint}
+            />
+          )}
         </MapContainer>
       )}
-      <EnvironmentFilled />
     </>
   );
 };

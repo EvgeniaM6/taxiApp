@@ -29,6 +29,7 @@
   },
   "dependencies": {
     "@ant-design/icons": "^5.1.4",
+    "@reduxjs/toolkit": "^1.9.5",
     "@types/react": "^18.2.15",
     "@types/react-dom": "^18.2.7",
     "@typescript-eslint/eslint-plugin": "^5.59.11",
@@ -42,6 +43,7 @@
     "eslint-plugin-react": "^7.32.2",
     "eslint-webpack-plugin": "^4.0.1",
     "leaflet": "^1.9.4",
+    "leaflet-control-geocoder": "^2.4.0",
     "leaflet-routing-machine": "^3.2.12",
     "prettier": "^3.0.0",
     "react": "^18.2.0",
