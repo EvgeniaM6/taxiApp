@@ -2,9 +2,9 @@ import { EnvironmentFilled } from '@ant-design/icons';
 import { DivIcon, LeafletEventHandlerFnMap, LeafletMouseEvent } from 'leaflet';
 import { Marker, Popup, useMapEvents } from 'react-leaflet';
 import { renderToString } from 'react-dom/server';
-import { secondaryAppColor } from '../../constants';
-import { useAppDispatch, useAppSelector } from '../hooks';
-import { setFinishPoint } from '../store/routeSlice';
+import { secondaryAppColor } from '../../../constants';
+import { useAppDispatch, useAppSelector } from '../../hooks';
+import { setFinishPoint } from '../../store/routeSlice';
 
 const iconHtmlString = renderToString(
   <EnvironmentFilled

@@ -2,7 +2,7 @@ import { useLocation } from 'react-router-dom';
 import { Menu } from 'antd';
 import { useEffect, useState } from 'react';
 import { navLinksArr } from './navLinksArr';
-import { Logo } from './Logo';
+import { Logo } from '../Logo';
 
 export const HeaderElem = () => {
   const location = useLocation();

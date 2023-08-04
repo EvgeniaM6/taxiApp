@@ -2,7 +2,7 @@ import { Select, Spin } from 'antd';
 import { LabeledValue } from 'antd/es/select';
 import { GeocodingResult } from 'leaflet-control-geocoder/dist/geocoders';
 import { useMemo, useRef, useState } from 'react';
-import { IGeocodeSelectProps, IGeocodeValue } from '../models';
+import { IGeocodeSelectProps, IGeocodeValue } from '../../models';
 
 export function GeocodeSelect<
   ValueType extends { key?: string; label: React.ReactNode; value: string | number },
