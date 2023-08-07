@@ -1,3 +1,4 @@
+import { TSignUpFormValues } from './auth.model';
 import {
   IGeocodeSelectProps,
   IGeocodeValue,
@@ -16,4 +17,5 @@ export {
   IGeocodeValue,
   TCarClassObj,
   TCarClassesObj,
+  TSignUpFormValues,
 };
