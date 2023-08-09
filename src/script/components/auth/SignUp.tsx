@@ -1,11 +1,12 @@
 import { Alert, Button, Form, Space } from 'antd';
-import { TSignUpFormValues } from '../../models';
+import { ISignUpFormValues } from '../../models';
 import { ChangeEventHandler, useState } from 'react';
 import { createUserWithEmailAndPassword, sendEmailVerification } from 'firebase/auth';
 import { auth } from '../../firebase';
 import { EmailInput } from './EmailInput';
 import { PasswordInput } from './PasswordInput';
 import { RepeatPasswordInput } from './RepeatPasswordInput';
+import { SignInGoogle } from './SignInGoogle';
 const { Item } = Form;
 
 export const SignUp = () => {
@@ -14,7 +15,7 @@ export const SignUp = () => {
   const [isWrongRegistration, setIsWrongRegistration] = useState(false);
   const [formElem] = Form.useForm();
 
-  const submitSignUp = (values: TSignUpFormValues): void => {
+  const submitSignUp = (values: ISignUpFormValues): void => {
     setIsSuccessRegistration(false);
     setIsWrongRegistration(false);
     const { e_mail, password } = values;
@@ -35,12 +36,6 @@ export const SignUp = () => {
     setPasswordEnetered(e.target.value);
   };
 
-  const signInWithGoogle = () => {
-    // signInWithEmailAndPassword(auth, '', '').then((userCred) => {
-    //   console.log('userCred=', userCred);
-    // });
-  };
-
   return (
     <Form
       form={formElem}
@@ -57,9 +52,7 @@ export const SignUp = () => {
           <Button type="primary" htmlType="submit">
             Sign Up
           </Button>
-          <Button type="default" onClick={signInWithGoogle}>
-            Sign In with Google
-          </Button>
+          <SignInGoogle />
         </Space>
       </Item>
       {isSuccessRegistration && (
