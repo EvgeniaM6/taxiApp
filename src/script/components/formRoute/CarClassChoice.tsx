@@ -1,8 +1,8 @@
 import { Radio, RadioChangeEvent } from 'antd';
-import { carClassesObj } from '../../constants';
-import { TCarClassObj } from '../models';
-import { useAppDispatch, useAppSelector } from '../hooks';
-import { setCarClass } from '../store/routeSlice';
+import { carClassesObj } from '../../../constants';
+import { TCarClassObj } from '../../models';
+import { useAppDispatch, useAppSelector } from '../../hooks';
+import { setCarClass } from '../../store/routeSlice';
 
 export const CarClassChoice = () => {
   const { carClass } = useAppSelector((state) => state.route);

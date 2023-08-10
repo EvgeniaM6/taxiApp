@@ -1,10 +1,10 @@
 import { Button, Form } from 'antd';
-import { useAppDispatch, useAppSelector } from '../hooks';
-import { fetchGeocode } from '../utils';
-import { setFinishPoint, setStartPoint, setDistanceInKms } from '../store/routeSlice';
+import { useAppDispatch, useAppSelector } from '../../hooks';
+import { fetchGeocode } from '../../utils';
+import { setFinishPoint, setStartPoint, setDistanceInKms } from '../../store/routeSlice';
 import { useEffect, useState } from 'react';
 import { GeocodeSelect } from './GeocodeSelect';
-import { IGeocodeValue, TLatLng } from '../models';
+import { IGeocodeValue, TLatLng } from '../../models';
 import { geocoders } from 'leaflet-control-geocoder';
 import { LatLngLiteral } from 'leaflet';
 import { GeocodingResult } from 'leaflet-control-geocoder/dist/geocoders';

@@ -25,4 +25,8 @@ export const navLinksArr = [
     ),
     key: 'authorization',
   },
+  {
+    label: <button className="header__link btn-logout">Log out</button>,
+    key: 'signout',
+  },
 ];

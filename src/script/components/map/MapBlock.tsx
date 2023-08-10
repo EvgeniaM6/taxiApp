@@ -10,11 +10,11 @@ import { MapContainer, Marker, Popup, TileLayer } from 'react-leaflet';
 import { FinishPointMarker } from './FinishPointMarker';
 import { renderToString } from 'react-dom/server';
 import { EnvironmentFilled } from '@ant-design/icons';
-import { metersInKm, primaryAppColor } from '../../constants';
+import { metersInKm, primaryAppColor } from '../../../constants';
 import MapRouting from './MapRouting';
 import { LocationPopup } from './LocationPopup';
-import { useAppDispatch, useAppSelector } from '../hooks';
-import { setDistanceInKms, setFinishPoint, setStartPoint } from '../store/routeSlice';
+import { useAppDispatch, useAppSelector } from '../../hooks';
+import { setDistanceInKms, setFinishPoint, setStartPoint } from '../../store/routeSlice';
 
 const iconHtmlString = renderToString(
   <EnvironmentFilled

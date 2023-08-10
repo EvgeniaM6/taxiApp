@@ -1,7 +1,7 @@
 import { Typography } from 'antd';
-import { useAppSelector } from '../hooks';
-import { convertSumToStr } from '../utils';
-import { carClassesObj, currencyExchUahInUsd } from '../../constants';
+import { useAppSelector } from '../../hooks';
+import { convertSumToStr } from '../../utils';
+import { carClassesObj, currencyExchUahInUsd } from '../../../constants';
 
 export const RouteCost = () => {
   const { Paragraph } = Typography;

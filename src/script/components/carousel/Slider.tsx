@@ -1,7 +1,7 @@
 import { Carousel } from 'antd';
-import Client1 from '../../assets/images/jpeg/smiling-young-woman-looking-away.jpg';
-import Client2 from '../../assets/images/jpeg/women-waiting-for-taxi.jpg';
-import Client3 from '../../assets/images/jpeg/handsome-man-talking-smartphone-while.jpg';
+import Client1 from '../../../assets/images/jpeg/smiling-young-woman-looking-away.jpg';
+import Client2 from '../../../assets/images/jpeg/women-waiting-for-taxi.jpg';
+import Client3 from '../../../assets/images/jpeg/handsome-man-talking-smartphone-while.jpg';
 import { Slide } from './Slide';
 
 export const Slider = () => {

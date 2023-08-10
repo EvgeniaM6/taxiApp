@@ -1,7 +1,7 @@
 import L, { LatLng, LatLngExpression } from 'leaflet';
 import { useMap } from 'react-leaflet';
-import { useAppDispatch } from '../hooks';
-import { setStartPoint } from '../store/routeSlice';
+import { useAppDispatch } from '../../hooks';
+import { setStartPoint } from '../../store/routeSlice';
 
 export const LocationPopup = (props: {
   position: LatLngExpression;

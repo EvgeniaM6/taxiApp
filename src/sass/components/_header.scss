@@ -3,3 +3,13 @@
   display: flex;
   justify-content: space-between;
 }
+
+.btn-logout {
+  display: inline;
+  cursor: pointer;
+  background: none;
+  font: inherit;
+  color: inherit;
+  padding: 0;
+  border: none;
+}
