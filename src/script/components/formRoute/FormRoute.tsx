@@ -10,6 +10,7 @@ import { LatLngLiteral } from 'leaflet';
 import { GeocodingResult } from 'leaflet-control-geocoder/dist/geocoders';
 import { CarClassChoice } from './CarClassChoice';
 import { RouteCost } from './RouteCost';
+const { Item } = Form;
 
 const geocoder = new geocoders.Nominatim();
 
@@ -72,13 +73,21 @@ export const FormRoute = () => {
     }
   }, [finishPoint]);
 
+  const orderTaxi = () => {
+    //
+  };
+
   return (
     <>
-      <Form labelCol={{ span: 2 }} wrapperCol={{ xs: { span: 16 }, lg: { span: 8 } }}>
-        <Form.Item label="Car class">
+      <Form
+        labelCol={{ span: 2 }}
+        wrapperCol={{ xs: { span: 16 }, lg: { span: 8 } }}
+        onFinish={orderTaxi}
+      >
+        <Item label="Car class">
           <CarClassChoice />
-        </Form.Item>
-        <Form.Item
+        </Item>
+        <Item
           label="From"
           rules={[{ required: true, message: 'Please input your point of departure!' }]}
         >
@@ -92,11 +101,8 @@ export const FormRoute = () => {
             style={{ width: '100%' }}
             setPoint={setNewStartPoint}
           />
-        </Form.Item>
-        <Form.Item
-          label="To"
-          rules={[{ required: true, message: 'Please input your destination!' }]}
-        >
+        </Item>
+        <Item label="To" rules={[{ required: true, message: 'Please input your destination!' }]}>
           <GeocodeSelect
             value={valueFinish}
             placeholder="Enter point of departure"
@@ -107,13 +113,13 @@ export const FormRoute = () => {
             style={{ width: '100%' }}
             setPoint={setNewFinishPoint}
           />
-        </Form.Item>
+        </Item>
         <RouteCost />
-        <Form.Item wrapperCol={{ offset: 2 }}>
+        <Item wrapperCol={{ offset: 2 }}>
           <Button type="primary" htmlType="submit">
             Order a taxi
           </Button>
-        </Form.Item>
+        </Item>
       </Form>
       <Button type="default" onClick={resetRoute}>
         Reset the route

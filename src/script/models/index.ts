@@ -1,4 +1,10 @@
-import { ISignInFormValues, ISignUpFormValues, TAuthState } from './auth.model';
+import {
+  ISignInFormValues,
+  ISignUpFormValues,
+  TAuthState,
+  TNewUserData,
+  TUserData,
+} from './auth.model';
 import {
   IGeocodeSelectProps,
   IGeocodeValue,
@@ -20,4 +26,6 @@ export {
   ISignUpFormValues,
   ISignInFormValues,
   TAuthState,
+  TUserData,
+  TNewUserData,
 };

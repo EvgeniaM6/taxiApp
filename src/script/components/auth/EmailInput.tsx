@@ -7,7 +7,7 @@ export const EmailInput = () => {
   return (
     <Item
       label="E-mail"
-      name="e_mail"
+      name="email"
       rules={[{ required: true, message: 'Please input your e-mail', type: 'email' }]}
     >
       <Input prefix={<MailOutlined />} placeholder="example@mail.ua" allowClear />

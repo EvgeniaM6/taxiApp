@@ -3,9 +3,12 @@ import { GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
 import { auth } from '../../firebase';
 import { useNavigate } from 'react-router-dom';
 import { GoogleOutlined } from '@ant-design/icons';
+import { useAppDispatch } from '../../hooks';
+import { setUserId } from '../../store/authSlice';
 
 export const SignInGoogle = () => {
   const navigate = useNavigate();
+  const dispatch = useAppDispatch();
 
   const signInWithGoogle = () => {
     const provider = new GoogleAuthProvider();
@@ -19,8 +22,9 @@ export const SignInGoogle = () => {
         console.log('token=', token);
       }
       // The signed-in user info.
-      const user = result.user;
+      const { user } = result;
       console.log('user=', user);
+      dispatch(setUserId(user.uid));
       // IdP data available using getAdditionalUserInfo(result)
     });
   };

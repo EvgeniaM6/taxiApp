@@ -7,6 +7,8 @@ import { auth } from '../../firebase';
 import { ISignInFormValues } from '../../models';
 import { SignInGoogle } from './SignInGoogle';
 import { useNavigate } from 'react-router-dom';
+import { useAppDispatch } from '../../hooks';
+import { setUserId } from '../../store/authSlice';
 const { Item } = Form;
 
 export const SignIn = () => {
@@ -14,15 +16,17 @@ export const SignIn = () => {
   const [isUserNotFound, setIsUserNotFound] = useState(false);
   const [formElem] = Form.useForm();
   const navigate = useNavigate();
+  const dispatch = useAppDispatch();
 
   const submitSignIn = (values: ISignInFormValues): void => {
     setIsWrongPassword(false);
     setIsUserNotFound(false);
-    const { e_mail, password } = values;
+    const { email, password } = values;
 
-    signInWithEmailAndPassword(auth, e_mail, password)
+    signInWithEmailAndPassword(auth, email, password)
       .then((userCred) => {
         console.log('userCred=', userCred);
+        dispatch(setUserId(userCred.user.uid));
         navigate('/');
       })
       .catch((err) => {
