@@ -6,12 +6,14 @@ import { signInWithEmailAndPassword } from 'firebase/auth';
 import { auth } from '../../firebase';
 import { ISignInFormValues } from '../../models';
 import { SignInGoogle } from './SignInGoogle';
+import { useNavigate } from 'react-router-dom';
 const { Item } = Form;
 
 export const SignIn = () => {
   const [isWrongPassword, setIsWrongPassword] = useState(false);
   const [isUserNotFound, setIsUserNotFound] = useState(false);
   const [formElem] = Form.useForm();
+  const navigate = useNavigate();
 
   const submitSignIn = (values: ISignInFormValues): void => {
     setIsWrongPassword(false);
@@ -21,6 +23,7 @@ export const SignIn = () => {
     signInWithEmailAndPassword(auth, e_mail, password)
       .then((userCred) => {
         console.log('userCred=', userCred);
+        navigate('/');
       })
       .catch((err) => {
         console.log('err=', err);

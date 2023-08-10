@@ -6,7 +6,6 @@ import { auth } from '../../firebase';
 import { EmailInput } from './EmailInput';
 import { PasswordInput } from './PasswordInput';
 import { RepeatPasswordInput } from './RepeatPasswordInput';
-import { SignInGoogle } from './SignInGoogle';
 const { Item } = Form;
 
 export const SignUp = () => {
@@ -52,7 +51,6 @@ export const SignUp = () => {
           <Button type="primary" htmlType="submit">
             Sign Up
           </Button>
-          <SignInGoogle />
         </Space>
       </Item>
       {isSuccessRegistration && (
