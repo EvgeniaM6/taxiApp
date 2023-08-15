@@ -1,7 +1,13 @@
 import { Button, Form } from 'antd';
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import { fetchGeocode } from '../../utils';
-import { setFinishPoint, setStartPoint, setDistanceInKms } from '../../store/routeSlice';
+import {
+  setFinishPoint,
+  setStartPoint,
+  setDistanceInKms,
+  setStartAddress,
+  setFinishAddress,
+} from '../../store/routeSlice';
 import { useEffect, useState } from 'react';
 import { GeocodeSelect } from './GeocodeSelect';
 import { IGeocodeValue, TLatLng } from '../../models';
@@ -15,21 +21,31 @@ const { Item } = Form;
 const geocoder = new geocoders.Nominatim();
 
 export const FormRoute = () => {
-  const { startPoint, finishPoint } = useAppSelector((state) => state.route);
+  const { startPoint, finishPoint, startAddress, finishAddress, distanceInKms } = useAppSelector(
+    (state) => state.route
+  );
   const dispatch = useAppDispatch();
 
   const resetRoute = (): void => {
     dispatch(setStartPoint(null));
     dispatch(setFinishPoint(null));
+    dispatch(setStartAddress(''));
+    dispatch(setFinishAddress(''));
     dispatch(setDistanceInKms(0));
   };
 
   const reverseRoute = (): void => {
     const newStartPoint = finishPoint;
     const newFinishPoint = startPoint;
+    const newStartAddress = finishAddress;
+    const newFinishAddress = startAddress;
+    const newDistanceInKms = distanceInKms;
     resetRoute();
     dispatch(setStartPoint(newStartPoint));
     dispatch(setFinishPoint(newFinishPoint));
+    dispatch(setStartAddress(newStartAddress));
+    dispatch(setFinishAddress(newFinishAddress));
+    dispatch(setDistanceInKms(newDistanceInKms));
   };
 
   const setNewStartPoint = (newPoint: TLatLng | null): void => {
@@ -40,41 +56,61 @@ export const FormRoute = () => {
     dispatch(setFinishPoint(newPoint));
   };
 
-  const [valueStart, setValueStart] = useState<IGeocodeValue[]>([]);
-  const [valueFinish, setValueFinish] = useState<IGeocodeValue[]>([]);
+  const [valueStart, setValueStart] = useState<IGeocodeValue | null>(null);
+  const [valueFinish, setValueFinish] = useState<IGeocodeValue | null>(null);
 
   useEffect(() => {
-    if (startPoint) {
-      geocoder.reverse(startPoint as LatLngLiteral, 1, (resultsArr) => {
+    if (startAddress) {
+      setValueStart({ label: startAddress, value: startAddress.slice(0, 7) });
+    } else if (startPoint) {
+      geocoder.reverse(startPoint as LatLngLiteral, 100, (resultsArr) => {
         const geocodeValuesArr = resultsArr.map((resultObj: GeocodingResult) => ({
           label: resultObj.name,
           value: resultObj.properties.place_id,
         }));
 
-        setValueStart(geocodeValuesArr);
+        setValueStart(geocodeValuesArr[0]);
       });
     } else {
-      setValueStart([]);
+      setValueStart(null);
     }
-  }, [startPoint]);
+  }, [startPoint, startAddress]);
 
   useEffect(() => {
-    if (finishPoint) {
+    if (finishAddress) {
+      setValueFinish({ label: finishAddress, value: finishAddress.slice(0, 7) });
+    } else if (finishPoint) {
       geocoder.reverse(finishPoint as LatLngLiteral, 1, (resultsArr) => {
         const geocodeValuesArr = resultsArr.map((resultObj: GeocodingResult) => ({
           label: resultObj.name,
           value: resultObj.properties.place_id,
         }));
 
-        setValueFinish(geocodeValuesArr);
+        setValueFinish(geocodeValuesArr[0]);
       });
     } else {
-      setValueFinish([]);
+      setValueFinish(null);
     }
-  }, [finishPoint]);
+  }, [finishPoint, finishAddress]);
 
   const orderTaxi = () => {
-    //
+    console.log('orderTaxi');
+  };
+
+  const handleChangeStartSelect = (newValue: IGeocodeValue | IGeocodeValue[]) => {
+    setValueStart(newValue as IGeocodeValue);
+  };
+
+  const handleChangeFinishSelect = (newValue: IGeocodeValue | IGeocodeValue[]) => {
+    setValueFinish(newValue as IGeocodeValue);
+  };
+
+  const changeStartAddress = (newAddress: string): void => {
+    dispatch(setStartAddress(newAddress));
+  };
+
+  const changeFinishAddress = (newAddress: string): void => {
+    dispatch(setFinishAddress(newAddress));
   };
 
   return (
@@ -95,11 +131,10 @@ export const FormRoute = () => {
             value={valueStart}
             placeholder="Enter point of departure"
             fetchOptions={fetchGeocode}
-            onChange={(newValue) => {
-              setValueStart(newValue as IGeocodeValue[]);
-            }}
+            onChange={handleChangeStartSelect}
             style={{ width: '100%' }}
             setPoint={setNewStartPoint}
+            setAddress={changeStartAddress}
           />
         </Item>
         <Item label="To" rules={[{ required: true, message: 'Please input your destination!' }]}>
@@ -107,11 +142,10 @@ export const FormRoute = () => {
             value={valueFinish}
             placeholder="Enter point of departure"
             fetchOptions={fetchGeocode}
-            onChange={(newValue) => {
-              setValueFinish(newValue as IGeocodeValue[]);
-            }}
+            onChange={handleChangeFinishSelect}
             style={{ width: '100%' }}
             setPoint={setNewFinishPoint}
+            setAddress={changeFinishAddress}
           />
         </Item>
         <RouteCost />

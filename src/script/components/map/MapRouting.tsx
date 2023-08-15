@@ -5,10 +5,15 @@ import { geocoders } from 'leaflet-control-geocoder';
 import { primaryAppColor } from '../../../constants';
 import { IWaypointsProps } from '../../models';
 
-const createRoutineMachineLayer = (props: IWaypointsProps): L.Routing.Control => {
-  const { startPoint, finishPoint, changeDistanceInKm, changeStartPoint, changeFinishPoint } =
-    props;
-
+const createRoutineMachineLayer = ({
+  startPoint,
+  finishPoint,
+  changeDistanceInKm,
+  changeStartPoint,
+  changeFinishPoint,
+  changeStartAddress,
+  changeFinishAddress,
+}: IWaypointsProps): L.Routing.Control => {
   if (!startPoint || !finishPoint) {
     const instance = L.Routing.control();
     return instance;
@@ -16,6 +21,21 @@ const createRoutineMachineLayer = (props: IWaypointsProps): L.Routing.Control =>
 
   const { lat: startLat, lng: startLng } = startPoint;
   const { lat: finishLat, lng: finishLng } = finishPoint;
+
+  const changeAddress = (result: geocoders.NominatimResult): void => {
+    const { lat, lon, display_name } = result;
+    const latNum = Number(lat);
+    const lngNum = Number(lon);
+    const distanceLatToStart = Math.abs(latNum - startLat);
+    const distanceLngToStart = Math.abs(lngNum - startLng);
+    const distanceLatToFinish = Math.abs(latNum - finishLat);
+    const distanceLngToFinish = Math.abs(lngNum - finishLng);
+    if (distanceLatToStart + distanceLngToStart < distanceLatToFinish + distanceLngToFinish) {
+      changeStartAddress(display_name);
+    } else {
+      changeFinishAddress(display_name);
+    }
+  };
 
   const changeWaypoints = (e: L.Routing.RoutingEvent): void => {
     const { waypoints } = e;
@@ -46,7 +66,12 @@ const createRoutineMachineLayer = (props: IWaypointsProps): L.Routing.Control =>
     routeWhileDragging: true,
     fitSelectedRoutes: true,
     showAlternatives: false,
-    geocoder: new geocoders.Nominatim(),
+    geocoder: new geocoders.Nominatim({
+      htmlTemplate(r) {
+        changeAddress(r);
+        return '';
+      },
+    }),
   })
     .on('waypointschanged', changeWaypoints)
     .on('routesfound', calculateDistance);

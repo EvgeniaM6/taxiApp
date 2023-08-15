@@ -4,7 +4,7 @@ import { Marker, Popup, useMapEvents } from 'react-leaflet';
 import { renderToString } from 'react-dom/server';
 import { secondaryAppColor } from '../../../constants';
 import { useAppDispatch, useAppSelector } from '../../hooks';
-import { setFinishPoint } from '../../store/routeSlice';
+import { setCanBuildRoute, setFinishPoint } from '../../store/routeSlice';
 
 const iconHtmlString = renderToString(
   <EnvironmentFilled
@@ -13,10 +13,7 @@ const iconHtmlString = renderToString(
 );
 const icon: DivIcon = new DivIcon({ html: iconHtmlString });
 
-export const FinishPointMarker = (props: {
-  setCanBuildRoute: React.Dispatch<React.SetStateAction<boolean>>;
-}) => {
-  const { setCanBuildRoute } = props;
+export const FinishPointMarker = () => {
   const { finishPoint } = useAppSelector((state) => state.route);
   const dispatch = useAppDispatch();
 
@@ -29,11 +26,13 @@ export const FinishPointMarker = (props: {
   });
 
   const dragLocation: LeafletEventHandlerFnMap = {
-    mousedown: (): void => setCanBuildRoute(false),
+    mousedown: (): void => {
+      dispatch(setCanBuildRoute(false));
+    },
     mouseup: (event: LeafletMouseEvent) => {
       const { lat, lng } = event.latlng;
       dispatch(setFinishPoint({ lat, lng }));
-      setCanBuildRoute(true);
+      dispatch(setCanBuildRoute(true));
     },
   };
 

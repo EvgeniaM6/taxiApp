@@ -14,7 +14,14 @@ import { metersInKm, primaryAppColor } from '../../../constants';
 import MapRouting from './MapRouting';
 import { LocationPopup } from './LocationPopup';
 import { useAppDispatch, useAppSelector } from '../../hooks';
-import { setDistanceInKms, setFinishPoint, setStartPoint } from '../../store/routeSlice';
+import {
+  setDistanceInKms,
+  setFinishPoint,
+  setStartPoint,
+  setStartAddress,
+  setFinishAddress,
+  setCanBuildRoute,
+} from '../../store/routeSlice';
 
 const iconHtmlString = renderToString(
   <EnvironmentFilled
@@ -28,10 +35,9 @@ export const MapBlock = () => {
     height: '500px',
   };
 
-  const { startPoint, finishPoint } = useAppSelector((state) => state.route);
+  const { startPoint, finishPoint, canBuildRoute } = useAppSelector((state) => state.route);
   const dispatch = useAppDispatch();
   const [position, setPosition] = useState<LatLngExpression | null>(null);
-  const [canBuildRoute, setCanBuildRoute] = useState(!!startPoint && !!finishPoint);
 
   const changeStartPosition = (newPosition: LatLngExpression): void => {
     setPosition(newPosition);
@@ -57,11 +63,13 @@ export const MapBlock = () => {
   navigator.geolocation.getCurrentPosition(succ);
 
   const dragLocation: LeafletEventHandlerFnMap = {
-    mousedown: (): void => setCanBuildRoute(false),
+    mousedown: (): void => {
+      dispatch(setCanBuildRoute(false));
+    },
     mouseup: (event: LeafletMouseEvent): void => {
       const { lat, lng } = event.latlng;
       dispatch(setStartPoint({ lat, lng }));
-      setCanBuildRoute(true);
+      dispatch(setCanBuildRoute(true));
     },
   };
 
@@ -77,6 +85,14 @@ export const MapBlock = () => {
     dispatch(setFinishPoint({ lat, lng }));
   };
 
+  const changeStartAddress = (address: string): void => {
+    dispatch(setStartAddress(address));
+  };
+
+  const changeFinishAddress = (address: string): void => {
+    dispatch(setFinishAddress(address));
+  };
+
   return (
     <>
       {position && (
@@ -88,7 +104,7 @@ export const MapBlock = () => {
           {!startPoint && (
             <>
               <Marker position={position} icon={icon} />
-              <LocationPopup position={position} setCanBuildRoute={setCanBuildRoute} />
+              <LocationPopup position={position} />
             </>
           )}
           {startPoint && (
@@ -96,7 +112,7 @@ export const MapBlock = () => {
               <Popup>From</Popup>
             </Marker>
           )}
-          <FinishPointMarker setCanBuildRoute={setCanBuildRoute} />
+          <FinishPointMarker />
           {startPoint && finishPoint && canBuildRoute && (
             <MapRouting
               startPoint={startPoint}
@@ -104,6 +120,8 @@ export const MapBlock = () => {
               changeDistanceInKm={changeDistanceInKm}
               changeStartPoint={changeStartPoint}
               changeFinishPoint={changeFinishPoint}
+              changeStartAddress={changeStartAddress}
+              changeFinishAddress={changeFinishAddress}
             />
           )}
         </MapContainer>
