@@ -1,3 +1,5 @@
+import { TTripData } from './route.model';
+
 export interface ISignInFormValues {
   email: string;
   password: string;
@@ -23,4 +25,8 @@ export type TUserData = {
 
 export type TNewUserData = {
   [key: string]: string;
+};
+
+export type TUpdatedUserTrips = {
+  [key: string]: TTripData;
 };

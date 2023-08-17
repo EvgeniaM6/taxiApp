@@ -25,12 +25,10 @@ export const SignIn = () => {
 
     signInWithEmailAndPassword(auth, email, password)
       .then((userCred) => {
-        console.log('userCred=', userCred);
         dispatch(setUserId(userCred.user.uid));
         navigate('/');
       })
       .catch((err) => {
-        console.log('err=', err);
         if (err.message.includes('wrong-password')) {
           setIsWrongPassword(true);
         }

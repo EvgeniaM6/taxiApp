@@ -47,3 +47,12 @@ export interface IGeocodeValue {
   label: string;
   value: string;
 }
+
+export type TTripData = {
+  startPoint: TLatLng;
+  finishPoint: TLatLng;
+  startAddress: string;
+  finishAddress: string;
+  distanceInKms: number;
+  carClass: string;
+};

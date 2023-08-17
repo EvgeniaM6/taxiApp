@@ -24,12 +24,9 @@ export const SignUp = () => {
     setIsSuccessRegistration(false);
     setIsWrongRegistration(false);
     const { email, password, phone, prefix, name } = values;
-    console.log('phone=', phone);
-    console.log('prefix=', prefix);
 
     createUserWithEmailAndPassword(auth, email, password)
       .then((credentials: UserCredential) => {
-        console.log('credentials=', credentials);
         formElem.resetFields();
         sendEmailVerification(credentials.user);
         setIsSuccessRegistration(true);

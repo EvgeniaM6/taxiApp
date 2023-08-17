@@ -3,6 +3,7 @@ import {
   ISignUpFormValues,
   TAuthState,
   TNewUserData,
+  TUpdatedUserTrips,
   TUserData,
 } from './auth.model';
 import {
@@ -13,6 +14,7 @@ import {
   TCarClassesObj,
   TLatLng,
   TRouteState,
+  TTripData,
 } from './route.model';
 
 export {
@@ -28,4 +30,6 @@ export {
   TAuthState,
   TUserData,
   TNewUserData,
+  TTripData,
+  TUpdatedUserTrips,
 };

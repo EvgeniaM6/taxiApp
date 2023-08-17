@@ -1,7 +1,7 @@
 import { initializeApp } from 'firebase/app';
 import { getAuth, signOut } from 'firebase/auth';
 import { getDatabase, ref, set, update } from 'firebase/database';
-import { TNewUserData, TUserData } from './models';
+import { TNewUserData, TTripData, TUpdatedUserTrips, TUserData } from './models';
 
 const firebaseConfig = {
   apiKey: 'AIzaSyAqUOLjQ1n8G07cd2dFkfW120VnfffMOWQ',
@@ -27,7 +27,7 @@ export const createNewUser = ({ userId, email, name, phone }: TUserData) => {
     name,
     email,
     phone,
-    trips: [],
+    trips: {},
   });
 };
 
@@ -37,5 +37,15 @@ export const updateUserData = (userId: string, key: string, value: string) => {
 
   const newValue: TNewUserData = {};
   newValue[key] = value;
+  update(reference, newValue);
+};
+
+export const addTrip = (userId: string, tripData: TTripData) => {
+  const db = getDatabase();
+  const reference = ref(db, `users/clients/${userId}/trips`);
+
+  const newValue: TUpdatedUserTrips = {};
+  const key = Date.now();
+  newValue[key] = tripData;
   update(reference, newValue);
 };

@@ -10,20 +10,21 @@ import {
 } from '../../store/routeSlice';
 import { useEffect, useState } from 'react';
 import { GeocodeSelect } from './GeocodeSelect';
-import { IGeocodeValue, TLatLng } from '../../models';
+import { IGeocodeValue, TLatLng, TTripData } from '../../models';
 import { geocoders } from 'leaflet-control-geocoder';
 import { LatLngLiteral } from 'leaflet';
 import { GeocodingResult } from 'leaflet-control-geocoder/dist/geocoders';
 import { CarClassChoice } from './CarClassChoice';
 import { RouteCost } from './RouteCost';
+import { addTrip } from '../../firebase';
 const { Item } = Form;
 
 const geocoder = new geocoders.Nominatim();
 
 export const FormRoute = () => {
-  const { startPoint, finishPoint, startAddress, finishAddress, distanceInKms } = useAppSelector(
-    (state) => state.route
-  );
+  const { startPoint, finishPoint, startAddress, finishAddress, distanceInKms, carClass } =
+    useAppSelector((state) => state.route);
+  const { userId } = useAppSelector((state) => state.auth);
   const dispatch = useAppDispatch();
 
   const resetRoute = (): void => {
@@ -94,7 +95,18 @@ export const FormRoute = () => {
   }, [finishPoint, finishAddress]);
 
   const orderTaxi = () => {
-    console.log('orderTaxi');
+    if (!startPoint || !finishPoint || !userId) return;
+
+    const newTripData: TTripData = {
+      startPoint,
+      finishPoint,
+      startAddress,
+      finishAddress,
+      distanceInKms,
+      carClass,
+    };
+
+    addTrip(userId, newTripData);
   };
 
   const handleChangeStartSelect = (newValue: IGeocodeValue | IGeocodeValue[]) => {
