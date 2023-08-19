@@ -1,7 +1,7 @@
 import { Routes, Route } from 'react-router-dom';
 import { ConfigProvider } from 'antd';
 import { Layout } from 'antd';
-import { Welcome, Main, ErrorPage, Authorization } from './pages';
+import { Welcome, Main, ErrorPage, Authorization, PersonalAcc } from './pages';
 import { HeaderElem } from './components';
 import { primaryAppColor } from '../constants';
 
@@ -31,6 +31,7 @@ export const App = () => {
               <Route path="/" element={<Welcome />} />
               <Route path="/route" element={<Main />} />
               <Route path="/authorization" element={<Authorization />} />
+              <Route path="/account" element={<PersonalAcc />} />
               <Route path="*" element={<ErrorPage />} />
             </Routes>
           </Content>

@@ -41,6 +41,8 @@ export const HeaderElem = () => {
             return false;
           } else if (navLink.key === 'authorization' && user) {
             return false;
+          } else if (navLink.key === 'account' && !user) {
+            return false;
           }
           return true;
         })}

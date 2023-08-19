@@ -1,0 +1,1 @@
+export const AMOUNT_LETTERS_OF_ADDRESS = 40;

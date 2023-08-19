@@ -16,6 +16,7 @@ import {
   TRouteState,
   TTripData,
 } from './route.model';
+import { TTripsFilterData, TTripsTableData } from './tripsData';
 
 export {
   TRouteState,
@@ -32,4 +33,6 @@ export {
   TNewUserData,
   TTripData,
   TUpdatedUserTrips,
+  TTripsTableData,
+  TTripsFilterData,
 };
