@@ -16,7 +16,8 @@ import { LatLngLiteral } from 'leaflet';
 import { GeocodingResult } from 'leaflet-control-geocoder/dist/geocoders';
 import { CarClassChoice } from './CarClassChoice';
 import { RouteCost } from './RouteCost';
-import { addTrip } from '../../firebase';
+import { addTrip, auth } from '../../firebase';
+import { useAuthState } from 'react-firebase-hooks/auth';
 const { Item } = Form;
 
 const geocoder = new geocoders.Nominatim();
@@ -24,7 +25,7 @@ const geocoder = new geocoders.Nominatim();
 export const FormRoute = () => {
   const { startPoint, finishPoint, startAddress, finishAddress, distanceInKms, carClass } =
     useAppSelector((state) => state.route);
-  const { userId } = useAppSelector((state) => state.auth);
+  const [user] = useAuthState(auth);
   const dispatch = useAppDispatch();
 
   const resetRoute = (): void => {
@@ -95,7 +96,7 @@ export const FormRoute = () => {
   }, [finishPoint, finishAddress]);
 
   const orderTaxi = () => {
-    if (!startPoint || !finishPoint || !userId) return;
+    if (!startPoint || !finishPoint || !user) return;
 
     const newTripData: TTripData = {
       startPoint,
@@ -106,7 +107,7 @@ export const FormRoute = () => {
       carClass,
     };
 
-    addTrip(userId, newTripData);
+    addTrip(user.uid, newTripData);
   };
 
   const handleChangeStartSelect = (newValue: IGeocodeValue | IGeocodeValue[]) => {

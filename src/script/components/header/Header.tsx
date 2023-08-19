@@ -6,14 +6,11 @@ import { Logo } from '../Logo';
 import { auth, logOut } from '../../firebase';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { SelectEventHandler, SelectInfo } from 'rc-menu/lib/interface';
-import { useAppDispatch } from '../../hooks';
-import { resetUserId } from '../../store/authSlice';
 
 export const HeaderElem = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const [user] = useAuthState(auth);
-  const dispatch = useAppDispatch();
 
   const keyFromPathName = location.pathname.split('/')[1];
   const [navKeyFromPathName, setNavKeyFromPathName] = useState(keyFromPathName || 'home');
@@ -26,7 +23,6 @@ export const HeaderElem = () => {
   const handleSelectItem: SelectEventHandler = ({ key }: SelectInfo) => {
     if (key !== 'signout') return;
     logOut();
-    dispatch(resetUserId());
     navigate('/');
   };
 
