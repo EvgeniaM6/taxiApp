@@ -3,7 +3,7 @@ import { ConfigProvider } from 'antd';
 import { Layout } from 'antd';
 import { Welcome, Main, ErrorPage, Authorization, PersonalAcc } from './pages';
 import { HeaderElem } from './components';
-import { primaryAppColor } from '../constants';
+import { PRIMARY_APP_COLOR } from '../constants';
 
 const { Header, Content } = Layout;
 
@@ -18,7 +18,7 @@ export const App = () => {
       <ConfigProvider
         theme={{
           token: {
-            colorPrimary: primaryAppColor,
+            colorPrimary: PRIMARY_APP_COLOR,
           },
         }}
       >

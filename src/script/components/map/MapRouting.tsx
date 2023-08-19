@@ -2,7 +2,7 @@ import L from 'leaflet';
 import { createControlComponent } from '@react-leaflet/core';
 import 'leaflet-routing-machine';
 import { geocoders } from 'leaflet-control-geocoder';
-import { primaryAppColor } from '../../../constants';
+import { PRIMARY_APP_COLOR } from '../../../constants';
 import { IWaypointsProps } from '../../models';
 
 const createRoutineMachineLayer = ({
@@ -59,7 +59,7 @@ const createRoutineMachineLayer = ({
     lineOptions: {
       extendToWaypoints: true,
       missingRouteTolerance: 0,
-      styles: [{ color: primaryAppColor, weight: 4 }],
+      styles: [{ color: PRIMARY_APP_COLOR, weight: 4 }],
     },
     show: true,
     addWaypoints: false,

@@ -1,16 +1,8 @@
-import {
-  LatLngExpression,
-  LeafletEventHandlerFnMap,
-  DivIcon,
-  LatLng,
-  LeafletMouseEvent,
-} from 'leaflet';
+import { LatLngExpression, LeafletEventHandlerFnMap, LatLng, LeafletMouseEvent } from 'leaflet';
 import { useState } from 'react';
 import { MapContainer, Marker, Popup, TileLayer } from 'react-leaflet';
 import { FinishPointMarker } from './FinishPointMarker';
-import { renderToString } from 'react-dom/server';
-import { EnvironmentFilled } from '@ant-design/icons';
-import { metersInKm, primaryAppColor } from '../../../constants';
+import { KYIV_POSITION, METERS_IN_KM, PRIMARY_APP_COLOR } from '../../../constants';
 import MapRouting from './MapRouting';
 import { LocationPopup } from './LocationPopup';
 import { useAppDispatch, useAppSelector } from '../../hooks';
@@ -22,13 +14,7 @@ import {
   setFinishAddress,
   setCanBuildRoute,
 } from '../../store/routeSlice';
-
-const iconHtmlString = renderToString(
-  <EnvironmentFilled
-    style={{ color: primaryAppColor, transform: 'translate(0px, -25px) scale(3.5)' }}
-  />
-);
-const icon: DivIcon = new DivIcon({ html: iconHtmlString });
+import { customMarker } from './customMarker';
 
 export const MapBlock = () => {
   const mapStyle: React.CSSProperties = {
@@ -60,7 +46,9 @@ export const MapBlock = () => {
 
     changeStartPosition(newPosition);
   };
-  navigator.geolocation.getCurrentPosition(succ);
+  navigator.geolocation.getCurrentPosition(succ, () => {
+    setPosition(KYIV_POSITION);
+  });
 
   const dragLocation: LeafletEventHandlerFnMap = {
     mousedown: (): void => {
@@ -74,7 +62,7 @@ export const MapBlock = () => {
   };
 
   const changeDistanceInKm = (distance: number): void => {
-    dispatch(setDistanceInKms(distance / metersInKm));
+    dispatch(setDistanceInKms(distance / METERS_IN_KM));
   };
 
   const changeStartPoint = (lat: number, lng: number): void => {
@@ -103,12 +91,17 @@ export const MapBlock = () => {
           />
           {!startPoint && (
             <>
-              <Marker position={position} icon={icon} />
+              <Marker position={position} icon={customMarker(PRIMARY_APP_COLOR)} />
               <LocationPopup position={position} />
             </>
           )}
           {startPoint && (
-            <Marker position={startPoint} draggable eventHandlers={dragLocation} icon={icon}>
+            <Marker
+              position={startPoint}
+              draggable
+              eventHandlers={dragLocation}
+              icon={customMarker(PRIMARY_APP_COLOR)}
+            >
               <Popup>From</Popup>
             </Marker>
           )}

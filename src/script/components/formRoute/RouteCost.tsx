@@ -1,18 +1,22 @@
 import { Typography } from 'antd';
 import { useAppSelector } from '../../hooks';
 import { convertSumToStr } from '../../utils';
-import { carClassesObj, currencyExchUahInUsd } from '../../../constants';
+import { CAR_CLASSES_OBJ, CURRENCY_EXCH_UAH_IN_USD } from '../../../constants';
 
 export const RouteCost = () => {
-  const { Paragraph } = Typography;
+  const { Text } = Typography;
   const { distanceInKms, carClass } = useAppSelector((state) => state.route);
-  const { priceUsdPerKm } = carClassesObj[carClass];
+  const { priceUsdPerKm } = CAR_CLASSES_OBJ[carClass];
 
   return (
-    <Paragraph>
-      {distanceInKms
-        ? `${convertSumToStr(Math.round(distanceInKms * priceUsdPerKm * currencyExchUahInUsd))} UAH`
-        : `Build your roote, please`}
-    </Paragraph>
+    <Text>
+      {`Cost: ${
+        distanceInKms
+          ? `${convertSumToStr(
+              Math.round(distanceInKms * priceUsdPerKm * CURRENCY_EXCH_UAH_IN_USD)
+            )} UAH`
+          : `Build your roote, please`
+      }`}
+    </Text>
   );
 };

@@ -1,4 +1,4 @@
-import { Button, Form } from 'antd';
+import { Button, Form, Space } from 'antd';
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import { fetchGeocode } from '../../utils';
 import {
@@ -161,19 +161,23 @@ export const FormRoute = () => {
             setAddress={changeFinishAddress}
           />
         </Item>
-        <RouteCost />
+        <Item wrapperCol={{ offset: 2 }}>
+          <RouteCost />
+        </Item>
         <Item wrapperCol={{ offset: 2 }}>
           <Button type="primary" htmlType="submit">
             Order a taxi
           </Button>
         </Item>
       </Form>
-      <Button type="default" onClick={resetRoute}>
-        Reset the route
-      </Button>
-      <Button type="default" disabled={!startPoint || !finishPoint} onClick={reverseRoute}>
-        Reverse the route
-      </Button>
+      <Space wrap style={{ marginBottom: 20 }}>
+        <Button type="default" onClick={resetRoute}>
+          Reset the route
+        </Button>
+        <Button type="default" disabled={!startPoint || !finishPoint} onClick={reverseRoute}>
+          Reverse the route
+        </Button>
+      </Space>
     </>
   );
 };
