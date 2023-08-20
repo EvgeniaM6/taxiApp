@@ -32,9 +32,8 @@ export const FinishPointMarker = () => {
     <Marker
       position={finishPoint}
       draggable
-      icon={customMarker(SECONDARY_APP_COLOR)}
       eventHandlers={dragLocation}
-      opacity={1}
+      icon={customMarker(SECONDARY_APP_COLOR)}
     >
       <Popup>To</Popup>
     </Marker>

@@ -18,6 +18,7 @@ import { CarClassChoice } from './CarClassChoice';
 import { RouteCost } from './RouteCost';
 import { addTrip, auth } from '../../firebase';
 import { useAuthState } from 'react-firebase-hooks/auth';
+import { useNavigate } from 'react-router-dom';
 const { Item } = Form;
 
 const geocoder = new geocoders.Nominatim();
@@ -26,7 +27,11 @@ export const FormRoute = () => {
   const { startPoint, finishPoint, startAddress, finishAddress, distanceInKms, carClass } =
     useAppSelector((state) => state.route);
   const [user] = useAuthState(auth);
+  const navigate = useNavigate();
   const dispatch = useAppDispatch();
+  const canOrderTaxi = Boolean(
+    startPoint && finishPoint && startAddress && finishAddress && distanceInKms
+  );
 
   const resetRoute = (): void => {
     dispatch(setStartPoint(null));
@@ -108,6 +113,8 @@ export const FormRoute = () => {
     };
 
     addTrip(user.uid, newTripData);
+    resetRoute();
+    navigate('/account');
   };
 
   const handleChangeStartSelect = (newValue: IGeocodeValue | IGeocodeValue[]) => {
@@ -165,7 +172,7 @@ export const FormRoute = () => {
           <RouteCost />
         </Item>
         <Item wrapperCol={{ offset: 2 }}>
-          <Button type="primary" htmlType="submit">
+          <Button type="primary" htmlType="submit" disabled={!canOrderTaxi}>
             Order a taxi
           </Button>
         </Item>
