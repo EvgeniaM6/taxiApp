@@ -1,12 +1,9 @@
 import { LockOutlined } from '@ant-design/icons';
 import { Form, Input } from 'antd';
-import { ChangeEventHandler } from 'react';
 
 const { Item } = Form;
 
-export const PasswordInput = (props: { changePassword: ChangeEventHandler<HTMLInputElement> }) => {
-  const { changePassword } = props;
-
+export const PasswordInput = () => {
   return (
     <Item
       label="Password"
@@ -26,12 +23,7 @@ export const PasswordInput = (props: { changePassword: ChangeEventHandler<HTMLIn
         },
       ]}
     >
-      <Input.Password
-        onChange={changePassword}
-        prefix={<LockOutlined />}
-        placeholder="example1*"
-        allowClear
-      />
+      <Input.Password prefix={<LockOutlined />} placeholder="example1*" allowClear />
     </Item>
   );
 };

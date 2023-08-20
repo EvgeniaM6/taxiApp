@@ -1,6 +1,6 @@
 import { Alert, Button, Form, Space } from 'antd';
 import { ISignUpFormValues } from '../../models';
-import { ChangeEventHandler, useState } from 'react';
+import { useState } from 'react';
 import {
   UserCredential,
   createUserWithEmailAndPassword,
@@ -15,7 +15,6 @@ import { NameInput } from './NameInput';
 const { Item } = Form;
 
 export const SignUp = () => {
-  const [passwordEnetered, setPasswordEnetered] = useState('');
   const [isSuccessRegistration, setIsSuccessRegistration] = useState(false);
   const [isWrongRegistration, setIsWrongRegistration] = useState(false);
   const [formElem] = Form.useForm();
@@ -40,10 +39,6 @@ export const SignUp = () => {
       });
   };
 
-  const changeRepeatPasswordValidate: ChangeEventHandler<HTMLInputElement> = (e) => {
-    setPasswordEnetered(e.target.value);
-  };
-
   return (
     <Form
       initialValues={{ prefix: '38' }}
@@ -54,8 +49,8 @@ export const SignUp = () => {
       onFinish={submitSignUp}
     >
       <EmailInput />
-      <PasswordInput changePassword={changeRepeatPasswordValidate} />
-      <RepeatPasswordInput passwordEnetered={passwordEnetered} />
+      <PasswordInput />
+      <RepeatPasswordInput />
       <NameInput />
       <PhoneInput />
       <Item wrapperCol={{ offset: 2 }}>

@@ -3,9 +3,7 @@ import { Form, Input } from 'antd';
 
 const { Item } = Form;
 
-export const RepeatPasswordInput = (props: { passwordEnetered: string }) => {
-  const { passwordEnetered } = props;
-
+export const RepeatPasswordInput = () => {
   return (
     <Item
       label="Repeat password"
@@ -15,11 +13,14 @@ export const RepeatPasswordInput = (props: { passwordEnetered: string }) => {
           required: true,
           message: 'Please repeat your password',
         },
-        {
-          message: 'Passwords must match',
-          min: passwordEnetered.length,
-          pattern: new RegExp(passwordEnetered),
-        },
+        ({ getFieldValue }) => ({
+          validator(_, value) {
+            if (!value || getFieldValue('password') === value) {
+              return Promise.resolve();
+            }
+            return Promise.reject(new Error('The new password that you entered do not match!'));
+          },
+        }),
       ]}
     >
       <Input.Password placeholder="example1*" prefix={<LockOutlined />} allowClear />
