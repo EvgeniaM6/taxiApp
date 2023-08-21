@@ -1,9 +1,12 @@
-import { Routes, Route } from 'react-router-dom';
+import { Routes, Route, useNavigate, useLocation } from 'react-router-dom';
 import { ConfigProvider } from 'antd';
 import { Layout } from 'antd';
 import { Welcome, Main, ErrorPage, Authorization, PersonalAcc } from './pages';
 import { HeaderElem } from './components';
 import { PRIMARY_APP_COLOR } from '../constants';
+import { useAuthState } from 'react-firebase-hooks/auth';
+import { auth } from './firebase';
+import { useEffect } from 'react';
 
 const { Header, Content } = Layout;
 
@@ -13,6 +16,18 @@ const contentStyleObj: React.CSSProperties = {
 };
 
 export const App = () => {
+  const [user] = useAuthState(auth);
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  useEffect(() => {
+    if (location.pathname === '/authorization' && user) {
+      navigate('/');
+    } else if (location.pathname === '/account' && !user) {
+      navigate('/authorization');
+    }
+  }, [location, user]);
+
   return (
     <>
       <ConfigProvider
