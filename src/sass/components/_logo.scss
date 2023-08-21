@@ -1,0 +1,16 @@
+.logo {
+  font-family: 'Bruno Ace', cursive;
+  transition: all .1s ease-in-out;
+
+  &:hover {
+    transform: scale(1.05);
+  }
+
+  &-first {
+    color: $color-primary;
+  }
+
+  &-second {
+    color: $color-secondary;
+  }
+}
