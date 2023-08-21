@@ -1,10 +1,9 @@
-import { LatLngExpression, LeafletEventHandlerFnMap, LatLng, LeafletMouseEvent } from 'leaflet';
+import { LatLngExpression, LatLng } from 'leaflet';
 import { useState } from 'react';
-import { MapContainer, Marker, Popup, TileLayer } from 'react-leaflet';
+import { MapContainer, TileLayer } from 'react-leaflet';
 import { FinishPointMarker } from './FinishPointMarker';
-import { KYIV_POSITION, METERS_IN_KM, PRIMARY_APP_COLOR } from '../../../constants';
+import { KYIV_POSITION, METERS_IN_KM } from '../../../constants';
 import MapRouting from './MapRouting';
-import { LocationPopup } from './LocationPopup';
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import {
   setDistanceInKms,
@@ -12,9 +11,8 @@ import {
   setStartPoint,
   setStartAddress,
   setFinishAddress,
-  setCanBuildRoute,
 } from '../../store/routeSlice';
-import { customMarker } from './customMarker';
+import { StartPointMarker } from './StartPointMarker';
 
 export const MapBlock = () => {
   const mapStyle: React.CSSProperties = {
@@ -31,7 +29,7 @@ export const MapBlock = () => {
     dispatch(setStartPoint({ lat, lng }));
   };
 
-  const succ: PositionCallback = (pos) => {
+  const successFoundPosition: PositionCallback = (pos) => {
     const { latitude, longitude } = pos.coords;
     const newPosition = new LatLng(latitude, longitude);
 
@@ -46,30 +44,24 @@ export const MapBlock = () => {
 
     changeStartPosition(newPosition);
   };
-  navigator.geolocation.getCurrentPosition(succ, () => {
-    setPosition(KYIV_POSITION);
-  });
 
-  const dragLocation: LeafletEventHandlerFnMap = {
-    mousedown: (): void => {
-      dispatch(setCanBuildRoute(false));
-    },
-    mouseup: (event: LeafletMouseEvent): void => {
-      const { lat, lng } = event.latlng;
-      dispatch(setStartPoint({ lat, lng }));
-      dispatch(setCanBuildRoute(true));
-    },
+  const notFoundPosition: PositionErrorCallback = () => {
+    setPosition(KYIV_POSITION);
   };
+
+  navigator.geolocation.getCurrentPosition(successFoundPosition, notFoundPosition);
 
   const changeDistanceInKm = (distance: number): void => {
     dispatch(setDistanceInKms(distance / METERS_IN_KM));
   };
 
   const changeStartPoint = (lat: number, lng: number): void => {
+    if (lat === startPoint?.lat && lng === startPoint.lng) return;
     dispatch(setStartPoint({ lat, lng }));
   };
 
   const changeFinishPoint = (lat: number, lng: number): void => {
+    if (lat === finishPoint?.lat && lng === finishPoint.lng) return;
     dispatch(setFinishPoint({ lat, lng }));
   };
 
@@ -89,22 +81,7 @@ export const MapBlock = () => {
             attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
             url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
           />
-          {!startPoint && (
-            <>
-              <Marker position={position} icon={customMarker(PRIMARY_APP_COLOR)} />
-              <LocationPopup position={position} />
-            </>
-          )}
-          {startPoint && (
-            <Marker
-              position={startPoint}
-              draggable
-              eventHandlers={dragLocation}
-              icon={customMarker(PRIMARY_APP_COLOR)}
-            >
-              <Popup>From</Popup>
-            </Marker>
-          )}
+          <StartPointMarker position={position} />
           <FinishPointMarker />
           {startPoint && finishPoint && canBuildRoute && (
             <MapRouting
