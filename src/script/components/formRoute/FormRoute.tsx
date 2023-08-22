@@ -19,6 +19,7 @@ import { RouteCost } from './RouteCost';
 import { addTrip, auth } from '../../firebase';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { useNavigate } from 'react-router-dom';
+import { ConfirmOrder } from './ConfirmOrder';
 const { Item } = Form;
 
 const geocoder = new geocoders.Nominatim();
@@ -32,6 +33,7 @@ export const FormRoute = () => {
   const canOrderTaxi = Boolean(
     startPoint && finishPoint && startAddress && finishAddress && distanceInKms
   );
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const resetRoute = (): void => {
     dispatch(setStartPoint(null));
@@ -101,7 +103,11 @@ export const FormRoute = () => {
   }, [finishPoint, finishAddress]);
 
   const orderTaxi = () => {
-    if (!startPoint || !finishPoint || !user) return;
+    if (!startPoint || !finishPoint) return;
+    if (!user) {
+      resetRoute();
+      return;
+    }
 
     const newTripData: TTripData = {
       startPoint,
@@ -133,12 +139,16 @@ export const FormRoute = () => {
     dispatch(setFinishAddress(newAddress));
   };
 
+  const showModal = () => {
+    setIsModalOpen(true);
+  };
+
   return (
     <>
       <Form
         labelCol={{ span: 2 }}
         wrapperCol={{ xs: { span: 16 }, lg: { span: 8 } }}
-        onFinish={orderTaxi}
+        onFinish={showModal}
       >
         <Item label="Car class">
           <CarClassChoice />
@@ -185,6 +195,7 @@ export const FormRoute = () => {
           Reverse the route
         </Button>
       </Space>
+      <ConfirmOrder isOpen={isModalOpen} setIsOpen={setIsModalOpen} orderTaxi={orderTaxi} />
     </>
   );
 };
