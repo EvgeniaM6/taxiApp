@@ -2,11 +2,12 @@ import { Routes, Route, useNavigate, useLocation } from 'react-router-dom';
 import { ConfigProvider } from 'antd';
 import { Layout } from 'antd';
 import { Welcome, Main, ErrorPage, Authorization, PersonalAcc } from './pages';
-import { HeaderElem } from './components';
+import { FooterElem, HeaderElem } from './components';
 import { PRIMARY_APP_COLOR } from '../constants';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { auth } from './firebase';
 import { useEffect } from 'react';
+import { Footer } from 'antd/es/layout/layout';
 
 const { Header, Content } = Layout;
 
@@ -37,7 +38,7 @@ export const App = () => {
           },
         }}
       >
-        <Layout>
+        <Layout style={{ minHeight: '100vh' }}>
           <Header className="header">
             <HeaderElem />
           </Header>
@@ -50,6 +51,9 @@ export const App = () => {
               <Route path="*" element={<ErrorPage />} />
             </Routes>
           </Content>
+          <Footer>
+            <FooterElem />
+          </Footer>
         </Layout>
       </ConfigProvider>
     </>
