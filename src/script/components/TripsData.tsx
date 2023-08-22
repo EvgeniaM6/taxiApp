@@ -1,9 +1,11 @@
 import { Table, Tooltip } from 'antd';
 import { TTripsTableData, TUpdatedUserTrips } from '../models';
 import { convertDate, shortenAddressesArr } from '../utils';
+import { useTranslation } from 'react-i18next';
 
 export const TripsData = (props: { userTrips: TUpdatedUserTrips | null; isLoading: boolean }) => {
   const { userTrips, isLoading } = props;
+  const { t } = useTranslation();
 
   const dataSource: TTripsTableData[] = userTrips
     ? Object.keys(userTrips)
@@ -57,7 +59,7 @@ export const TripsData = (props: { userTrips: TUpdatedUserTrips | null; isLoadin
 
   const columns = [
     {
-      title: 'Date',
+      title: t('columnDate'),
       dataIndex: 'date',
       key: 'date',
       filterSearch: true,
@@ -67,7 +69,7 @@ export const TripsData = (props: { userTrips: TUpdatedUserTrips | null; isLoadin
       },
     },
     {
-      title: 'From',
+      title: t('columnFrom'),
       dataIndex: 'from',
       key: 'from',
       filterSearch: true,
@@ -85,7 +87,7 @@ export const TripsData = (props: { userTrips: TUpdatedUserTrips | null; isLoadin
       ),
     },
     {
-      title: 'To',
+      title: t('columnTo'),
       dataIndex: 'to',
       key: 'to',
       filterSearch: true,

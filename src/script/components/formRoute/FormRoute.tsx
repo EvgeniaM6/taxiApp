@@ -20,6 +20,7 @@ import { addTrip, auth } from '../../firebase';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { useNavigate } from 'react-router-dom';
 import { ConfirmOrder } from './ConfirmOrder';
+import { useTranslation } from 'react-i18next';
 const { Item } = Form;
 
 const geocoder = new geocoders.Nominatim();
@@ -34,6 +35,7 @@ export const FormRoute = () => {
     startPoint && finishPoint && startAddress && finishAddress && distanceInKms
   );
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const { t } = useTranslation();
 
   const resetRoute = (): void => {
     dispatch(setStartPoint(null));
@@ -150,16 +152,16 @@ export const FormRoute = () => {
         wrapperCol={{ xs: { span: 16 }, lg: { span: 8 } }}
         onFinish={showModal}
       >
-        <Item label="Car class">
+        <Item label={t('labelCarClass')}>
           <CarClassChoice />
         </Item>
         <Item
-          label="From"
-          rules={[{ required: true, message: 'Please input your point of departure!' }]}
+          label={t('labelFromAddress')}
+          rules={[{ required: true, message: t('errMessageFromAddress') }]}
         >
           <GeocodeSelect
             value={valueStart}
-            placeholder="Enter point of departure"
+            placeholder={t('placeholderFromAddress')}
             fetchOptions={fetchGeocode}
             onChange={handleChangeStartSelect}
             style={{ width: '100%' }}
@@ -167,10 +169,13 @@ export const FormRoute = () => {
             setAddress={changeStartAddress}
           />
         </Item>
-        <Item label="To" rules={[{ required: true, message: 'Please input your destination!' }]}>
+        <Item
+          label={t('labelToAddress')}
+          rules={[{ required: true, message: t('errMessageToAddress') }]}
+        >
           <GeocodeSelect
             value={valueFinish}
-            placeholder="Enter point of departure"
+            placeholder={t('placeholderToAddress')}
             fetchOptions={fetchGeocode}
             onChange={handleChangeFinishSelect}
             style={{ width: '100%' }}
@@ -183,16 +188,16 @@ export const FormRoute = () => {
         </Item>
         <Item wrapperCol={{ offset: 2 }}>
           <Button type="primary" htmlType="submit" disabled={!canOrderTaxi}>
-            Order a taxi
+            {t('btnOrderTaxi')}
           </Button>
         </Item>
       </Form>
       <Space wrap style={{ marginBottom: 20 }}>
         <Button type="default" disabled={!startPoint && !finishPoint} onClick={resetRoute}>
-          Reset the route
+          {t('btnResetRoute')}
         </Button>
         <Button type="default" disabled={!startPoint || !finishPoint} onClick={reverseRoute}>
-          Reverse the route
+          {t('btnReverseRoute')}
         </Button>
       </Space>
       <ConfirmOrder isOpen={isModalOpen} setIsOpen={setIsModalOpen} orderTaxi={orderTaxi} />

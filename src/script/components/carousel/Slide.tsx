@@ -1,14 +1,10 @@
 import React from 'react';
 import { Typography } from 'antd';
+import { TSlideProps } from '../../models';
 const { Title, Paragraph } = Typography;
 
 const titleStyle: React.CSSProperties = {
   color: '#fff',
-};
-
-type TSlideProps = {
-  imgSrc: string;
-  title: string;
 };
 
 export const Slide = (props: React.PropsWithChildren<TSlideProps>) => {

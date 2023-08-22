@@ -1,29 +1,32 @@
 import { LockOutlined } from '@ant-design/icons';
 import { Form, Input } from 'antd';
+import { useTranslation } from 'react-i18next';
 
 const { Item } = Form;
 
 export const PasswordInput = () => {
+  const { t } = useTranslation();
+
   return (
     <Item
-      label="Password"
+      label={t('labelPassword')}
       name="password"
       rules={[
         {
           required: true,
-          message: 'Please input your password',
+          message: t('errMessagePassword'),
         },
         {
-          message: 'Password must be longer than 6 symbols',
+          message: t('errMessageShortPassword'),
           min: 6,
         },
         {
-          message: 'Password must contain letters, degits and symbols',
-          pattern: /^(?=.*[0-9])(?=.*[!@#$%^&*_+-])(?=.*[a-zA-Z]).{6,}$/,
+          message: t('errMessageUnsecuredPassword'),
+          pattern: /^(?=.*[0-9])(?=.*[!@#$%^&*_+-])(?=.*[A-Z,А-Я,a-z,а-я]).{6,}$/,
         },
       ]}
     >
-      <Input.Password prefix={<LockOutlined />} placeholder="example1*" allowClear />
+      <Input.Password prefix={<LockOutlined />} placeholder={t('placeholderPassword')} allowClear />
     </Item>
   );
 };

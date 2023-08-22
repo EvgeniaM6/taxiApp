@@ -1,15 +1,14 @@
 import { Form, Input, Select } from 'antd';
+import { useTranslation } from 'react-i18next';
 
 const { Item } = Form;
 const { Option } = Select;
 
 export const PhoneInput = () => {
+  const { t } = useTranslation();
+
   const prefixSelector = (
-    <Item
-      name="prefix"
-      noStyle
-      rules={[{ required: true, message: 'Please input your phone number!' }]}
-    >
+    <Item name="prefix" noStyle rules={[{ required: true, message: t('errMessagePhoneNumber') }]}>
       <Select style={{ width: 70 }}>
         <Option value="38">+38</Option>
       </Select>
@@ -19,11 +18,11 @@ export const PhoneInput = () => {
   return (
     <Item
       name="phone"
-      label="Phone Number"
+      label={t('labelPhoneNumber')}
       rules={[
         {
           required: true,
-          message: 'Please input your phone number!',
+          message: t('errMessagePhoneNumber'),
           pattern: /^[0-9]{3,15}$/,
           min: 3,
           max: 15,

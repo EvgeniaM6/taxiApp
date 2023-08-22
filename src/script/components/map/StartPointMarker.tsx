@@ -6,11 +6,13 @@ import { PRIMARY_APP_COLOR } from '../../../constants';
 import { setCanBuildRoute, setStartPoint } from '../../store/routeSlice';
 import { useEffect } from 'react';
 import L from 'leaflet';
+import { useTranslation } from 'react-i18next';
 
 export const StartPointMarker = (props: { position: LatLngExpression }) => {
   const { position } = props;
   const { startPoint } = useAppSelector((state) => state.route);
   const dispatch = useAppDispatch();
+  const { t } = useTranslation();
   const map = useMap();
 
   const dragLocation: LeafletEventHandlerFnMap = {
@@ -34,7 +36,7 @@ export const StartPointMarker = (props: { position: LatLngExpression }) => {
   });
 
   const popup = L.popup();
-  popup.setLatLng(position).setContent('You are here?');
+  popup.setLatLng(position).setContent(t('popupPosition'));
 
   useEffect(() => {
     if (!startPoint) {
@@ -54,7 +56,7 @@ export const StartPointMarker = (props: { position: LatLngExpression }) => {
           eventHandlers={dragLocation}
           icon={customMarker(PRIMARY_APP_COLOR)}
         >
-          <Popup>From</Popup>
+          <Popup>{t('popupStart')}</Popup>
         </Marker>
       ) : (
         <>

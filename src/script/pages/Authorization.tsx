@@ -1,9 +1,11 @@
 import { useState } from 'react';
 import { SignIn, SignUp } from '../components/auth';
 import { Form, Radio, RadioChangeEvent } from 'antd';
+import { useTranslation } from 'react-i18next';
 
 export const Authorization = () => {
   const [isSignIn, setIsSignIn] = useState(true);
+  const { t } = useTranslation();
 
   const chooseAuth = (e: RadioChangeEvent): void => {
     setIsSignIn(e.target.value === 'signIn');
@@ -14,10 +16,10 @@ export const Authorization = () => {
       <Form style={{ paddingBottom: 24 }}>
         <Radio.Group onChange={chooseAuth} defaultValue={isSignIn ? 'signIn' : 'signUp'}>
           <Radio.Button value="signIn" key="signIn">
-            Sign In
+            {t('btnSignIn')}
           </Radio.Button>
           <Radio.Button value="signUp" key="signUp">
-            Sign Up
+            {t('btnSignUp')}
           </Radio.Button>
         </Radio.Group>
       </Form>
