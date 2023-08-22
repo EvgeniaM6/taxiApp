@@ -188,7 +188,7 @@ export const FormRoute = () => {
         </Item>
       </Form>
       <Space wrap style={{ marginBottom: 20 }}>
-        <Button type="default" onClick={resetRoute}>
+        <Button type="default" disabled={!startPoint && !finishPoint} onClick={resetRoute}>
           Reset the route
         </Button>
         <Button type="default" disabled={!startPoint || !finishPoint} onClick={reverseRoute}>
