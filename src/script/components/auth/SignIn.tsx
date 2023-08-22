@@ -7,6 +7,7 @@ import { auth } from '../../firebase';
 import { ISignInFormValues } from '../../models';
 import { SignInGoogle } from './SignInGoogle';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 const { Item } = Form;
 
 export const SignIn = () => {
@@ -14,6 +15,7 @@ export const SignIn = () => {
   const [isUserNotFound, setIsUserNotFound] = useState(false);
   const [formElem] = Form.useForm();
   const navigate = useNavigate();
+  const { t } = useTranslation();
 
   const submitSignIn = (values: ISignInFormValues): void => {
     setIsWrongPassword(false);
@@ -44,28 +46,36 @@ export const SignIn = () => {
     >
       <EmailInput />
       <Item
-        label="Password"
+        label={t('labelPassword')}
         name="password"
         rules={[
           {
             required: true,
-            message: 'Please input your password',
+            message: t('errMessagePassword'),
             min: 6,
           },
         ]}
       >
-        <Input.Password prefix={<LockOutlined />} placeholder="example1*" allowClear />
+        <Input.Password
+          prefix={<LockOutlined />}
+          placeholder={t('placeholderPassword')}
+          allowClear
+        />
       </Item>
       <Item wrapperCol={{ offset: 2 }}>
         <Space>
           <Button type="primary" htmlType="submit">
-            Sign In
+            {t('btnSignIn')}
           </Button>
           <SignInGoogle />
         </Space>
       </Item>
-      {isWrongPassword && <Alert showIcon message="Wrong password" type="error" closable />}
-      {isUserNotFound && <Alert showIcon message="User not found" type="error" closable />}
+      {isWrongPassword && (
+        <Alert showIcon message={t('errMessageWrongPassword')} type="error" closable />
+      )}
+      {isUserNotFound && (
+        <Alert showIcon message={t('errMessageUserNotFound')} type="error" closable />
+      )}
     </Form>
   );
 };

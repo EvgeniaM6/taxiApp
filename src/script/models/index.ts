@@ -13,11 +13,13 @@ import {
   IWaypointsProps,
   TCarClassObj,
   TCarClassesObj,
+  TConfirmFormProps,
   TLatLng,
   TRouteState,
   TTripData,
 } from './route.model';
-import { TTripsFilterData, TTripsTableData } from './tripsData';
+import { TTripsFilterData, TTripsTableData } from './tripsData.model';
+import { TSlideProps } from './welcome.model';
 
 export {
   TRouteState,
@@ -37,4 +39,6 @@ export {
   TTripsTableData,
   TTripsFilterData,
   TNavLinkObj,
+  TSlideProps,
+  TConfirmFormProps,
 };

@@ -4,10 +4,8 @@ import { useEffect, useState } from 'react';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { auth } from '../../firebase';
 import { PhoneInput } from '../auth/PhoneInput';
-type TConfirmFormProps = {
-  phone: string;
-  prefix: string;
-};
+import { useTranslation } from 'react-i18next';
+import { TConfirmFormProps } from '../../models';
 
 export const ConfirmOrder = (props: {
   isOpen: boolean;
@@ -22,6 +20,7 @@ export const ConfirmOrder = (props: {
   const [canConfirm, setCanConfirm] = useState(false);
   const { isOpen, orderTaxi, setIsOpen } = props;
   const [formElem] = Form.useForm();
+  const { t } = useTranslation();
 
   const handleOk = (): void => {
     setIsOpen(false);
@@ -56,11 +55,12 @@ export const ConfirmOrder = (props: {
 
   return (
     <Modal
-      title="Confirm order"
+      title={t('modalConfirmOrder')}
       open={isOpen}
       onOk={handleOk}
       onCancel={handleCancel}
       okButtonProps={{ disabled: !canConfirm }}
+      cancelText={t('btnCancelConfirm')}
     >
       <Form initialValues={phoneNumber} form={formElem} onValuesChange={checkCanConfirm}>
         <PhoneInput />

@@ -12,12 +12,14 @@ import { PasswordInput } from './PasswordInput';
 import { RepeatPasswordInput } from './RepeatPasswordInput';
 import { PhoneInput } from './PhoneInput';
 import { NameInput } from './NameInput';
+import { useTranslation } from 'react-i18next';
 const { Item } = Form;
 
 export const SignUp = () => {
   const [isSuccessRegistration, setIsSuccessRegistration] = useState(false);
   const [isWrongRegistration, setIsWrongRegistration] = useState(false);
   const [formElem] = Form.useForm();
+  const { t } = useTranslation();
 
   const submitSignUp = (values: ISignUpFormValues): void => {
     setIsSuccessRegistration(false);
@@ -56,20 +58,15 @@ export const SignUp = () => {
       <Item wrapperCol={{ offset: 2 }}>
         <Space>
           <Button type="primary" htmlType="submit">
-            Sign Up
+            {t('btnSignUp')}
           </Button>
         </Space>
       </Item>
       {isSuccessRegistration && (
-        <Alert
-          showIcon
-          message="Success registration! Check your e-mail to confirm it"
-          type="success"
-          closable
-        />
+        <Alert showIcon message={t('successRegistrationMessage')} type="success" closable />
       )}
       {isWrongRegistration && (
-        <Alert showIcon message="This e-mail was registered" type="error" closable />
+        <Alert showIcon message={t('errMessageEmailWasRegistered')} type="error" closable />
       )}
     </Form>
   );

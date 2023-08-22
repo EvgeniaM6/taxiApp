@@ -6,15 +6,24 @@ export const CURRENCY_EXCH_UAH_IN_USD = 30;
 
 export const CAR_CLASSES_OBJ: TCarClassesObj = {
   econom: {
-    title: 'Econom',
+    title: {
+      en: 'Econom',
+      ua: 'Економ',
+    },
     priceUsdPerKm: 0.35,
   },
   standard: {
-    title: 'Standard',
+    title: {
+      en: 'Standard',
+      ua: 'Стандарт',
+    },
     priceUsdPerKm: 0.5,
   },
   lux: {
-    title: 'Lux',
+    title: {
+      en: 'Lux',
+      ua: 'Люкс',
+    },
     priceUsdPerKm: 0.75,
   },
 };

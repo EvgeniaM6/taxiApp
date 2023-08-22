@@ -3,9 +3,11 @@ import { GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
 import { auth } from '../../firebase';
 import { useNavigate } from 'react-router-dom';
 import { GoogleOutlined } from '@ant-design/icons';
+import { useTranslation } from 'react-i18next';
 
 export const SignInGoogle = () => {
   const navigate = useNavigate();
+  const { t } = useTranslation();
 
   const signInWithGoogle = () => {
     const provider = new GoogleAuthProvider();
@@ -17,7 +19,7 @@ export const SignInGoogle = () => {
 
   return (
     <Button icon={<GoogleOutlined />} type="default" onClick={signInWithGoogle}>
-      Sign In with Google
+      {t('btnSignInWithGoogle')}
     </Button>
   );
 };

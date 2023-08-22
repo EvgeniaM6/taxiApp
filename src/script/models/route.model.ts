@@ -7,8 +7,12 @@ export type TLatLng = {
   lng: number;
 };
 
+type TCarClassTitleObj = {
+  [key: string]: string;
+};
+
 export type TCarClassObj = {
-  title: string;
+  title: TCarClassTitleObj;
   priceUsdPerKm: number;
 };
 
@@ -55,4 +59,9 @@ export type TTripData = {
   finishAddress: string;
   distanceInKms: number;
   carClass: string;
+};
+
+export type TConfirmFormProps = {
+  phone: string;
+  prefix: string;
 };
