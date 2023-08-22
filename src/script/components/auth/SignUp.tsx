@@ -1,15 +1,20 @@
 import { Alert, Button, Form, Space } from 'antd';
 import { ISignUpFormValues } from '../../models';
-import { ChangeEventHandler, useState } from 'react';
-import { createUserWithEmailAndPassword, sendEmailVerification } from 'firebase/auth';
-import { auth } from '../../firebase';
+import { useState } from 'react';
+import {
+  UserCredential,
+  createUserWithEmailAndPassword,
+  sendEmailVerification,
+} from 'firebase/auth';
+import { auth, createNewUser } from '../../firebase';
 import { EmailInput } from './EmailInput';
 import { PasswordInput } from './PasswordInput';
 import { RepeatPasswordInput } from './RepeatPasswordInput';
+import { PhoneInput } from './PhoneInput';
+import { NameInput } from './NameInput';
 const { Item } = Form;
 
 export const SignUp = () => {
-  const [passwordEnetered, setPasswordEnetered] = useState('');
   const [isSuccessRegistration, setIsSuccessRegistration] = useState(false);
   const [isWrongRegistration, setIsWrongRegistration] = useState(false);
   const [formElem] = Form.useForm();
@@ -17,12 +22,15 @@ export const SignUp = () => {
   const submitSignUp = (values: ISignUpFormValues): void => {
     setIsSuccessRegistration(false);
     setIsWrongRegistration(false);
-    const { e_mail, password } = values;
-    createUserWithEmailAndPassword(auth, e_mail, password)
-      .then((dd) => {
+    const { email, password, phone, prefix, name } = values;
+
+    createUserWithEmailAndPassword(auth, email, password)
+      .then((credentials: UserCredential) => {
         formElem.resetFields();
-        sendEmailVerification(dd.user);
+        sendEmailVerification(credentials.user);
         setIsSuccessRegistration(true);
+
+        createNewUser({ userId: credentials.user.uid, email, name, phone: `${prefix}${phone}` });
       })
       .catch((err) => {
         if (err.message.includes('email-already-in-use')) {
@@ -31,12 +39,9 @@ export const SignUp = () => {
       });
   };
 
-  const changeRepeatPasswordValidate: ChangeEventHandler<HTMLInputElement> = (e) => {
-    setPasswordEnetered(e.target.value);
-  };
-
   return (
     <Form
+      initialValues={{ prefix: '38' }}
       form={formElem}
       labelWrap
       labelCol={{ span: 2 }}
@@ -44,8 +49,10 @@ export const SignUp = () => {
       onFinish={submitSignUp}
     >
       <EmailInput />
-      <PasswordInput changePassword={changeRepeatPasswordValidate} />
-      <RepeatPasswordInput passwordEnetered={passwordEnetered} />
+      <PasswordInput />
+      <RepeatPasswordInput />
+      <NameInput />
+      <PhoneInput />
       <Item wrapperCol={{ offset: 2 }}>
         <Space>
           <Button type="primary" htmlType="submit">

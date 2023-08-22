@@ -5,7 +5,10 @@ const initialState: TRouteState = {
   distanceInKms: 0,
   startPoint: null,
   finishPoint: null,
+  startAddress: '',
+  finishAddress: '',
   carClass: 'standard',
+  canBuildRoute: true,
 };
 
 const routeSlice = createSlice({
@@ -21,11 +24,28 @@ const routeSlice = createSlice({
     setFinishPoint(state, action) {
       return { ...state, finishPoint: action.payload };
     },
+    setStartAddress(state, action) {
+      return { ...state, startAddress: action.payload };
+    },
+    setFinishAddress(state, action) {
+      return { ...state, finishAddress: action.payload };
+    },
     setCarClass(state, action) {
       return { ...state, carClass: action.payload };
+    },
+    setCanBuildRoute(state, action) {
+      return { ...state, canBuildRoute: action.payload };
     },
   },
 });
 
-export const { setDistanceInKms, setStartPoint, setFinishPoint, setCarClass } = routeSlice.actions;
+export const {
+  setDistanceInKms,
+  setStartPoint,
+  setFinishPoint,
+  setCarClass,
+  setStartAddress,
+  setFinishAddress,
+  setCanBuildRoute,
+} = routeSlice.actions;
 export default routeSlice.reducer;

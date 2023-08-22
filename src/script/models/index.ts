@@ -1,4 +1,11 @@
-import { ISignInFormValues, ISignUpFormValues, TAuthState } from './auth.model';
+import {
+  ISignInFormValues,
+  ISignUpFormValues,
+  TAuthState,
+  TNewUserData,
+  TUpdatedUserTrips,
+  TUserData,
+} from './auth.model';
 import {
   IGeocodeSelectProps,
   IGeocodeValue,
@@ -7,7 +14,9 @@ import {
   TCarClassesObj,
   TLatLng,
   TRouteState,
+  TTripData,
 } from './route.model';
+import { TTripsFilterData, TTripsTableData } from './tripsData';
 
 export {
   TRouteState,
@@ -20,4 +29,10 @@ export {
   ISignUpFormValues,
   ISignInFormValues,
   TAuthState,
+  TUserData,
+  TNewUserData,
+  TTripData,
+  TUpdatedUserTrips,
+  TTripsTableData,
+  TTripsFilterData,
 };

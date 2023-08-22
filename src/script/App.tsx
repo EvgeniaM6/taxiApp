@@ -1,9 +1,12 @@
-import { Routes, Route } from 'react-router-dom';
+import { Routes, Route, useNavigate, useLocation } from 'react-router-dom';
 import { ConfigProvider } from 'antd';
 import { Layout } from 'antd';
-import { Welcome, Main, ErrorPage, Authorization } from './pages';
+import { Welcome, Main, ErrorPage, Authorization, PersonalAcc } from './pages';
 import { HeaderElem } from './components';
-import { primaryAppColor } from '../constants';
+import { PRIMARY_APP_COLOR } from '../constants';
+import { useAuthState } from 'react-firebase-hooks/auth';
+import { auth } from './firebase';
+import { useEffect } from 'react';
 
 const { Header, Content } = Layout;
 
@@ -13,12 +16,24 @@ const contentStyleObj: React.CSSProperties = {
 };
 
 export const App = () => {
+  const [user] = useAuthState(auth);
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  useEffect(() => {
+    if (location.pathname === '/authorization' && user) {
+      navigate('/');
+    } else if (location.pathname === '/account' && !user) {
+      navigate('/authorization');
+    }
+  }, [location, user]);
+
   return (
     <>
       <ConfigProvider
         theme={{
           token: {
-            colorPrimary: primaryAppColor,
+            colorPrimary: PRIMARY_APP_COLOR,
           },
         }}
       >
@@ -31,6 +46,7 @@ export const App = () => {
               <Route path="/" element={<Welcome />} />
               <Route path="/route" element={<Main />} />
               <Route path="/authorization" element={<Authorization />} />
+              <Route path="/account" element={<PersonalAcc />} />
               <Route path="*" element={<ErrorPage />} />
             </Routes>
           </Content>

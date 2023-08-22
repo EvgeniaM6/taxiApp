@@ -10,18 +10,8 @@ export const SignInGoogle = () => {
   const signInWithGoogle = () => {
     const provider = new GoogleAuthProvider();
     provider.setCustomParameters({ 'Cross-Origin-Opener-Policy': 'same-origin-allow-popups' });
-    signInWithPopup(auth, provider).then((result) => {
-      // This gives you a Google Access Token. You can use it to access the Google API.
+    signInWithPopup(auth, provider).then(() => {
       navigate('/');
-      const credential = GoogleAuthProvider.credentialFromResult(result);
-      if (credential) {
-        const token = credential.accessToken;
-        console.log('token=', token);
-      }
-      // The signed-in user info.
-      const user = result.user;
-      console.log('user=', user);
-      // IdP data available using getAdditionalUserInfo(result)
     });
   };
 

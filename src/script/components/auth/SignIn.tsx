@@ -18,15 +18,13 @@ export const SignIn = () => {
   const submitSignIn = (values: ISignInFormValues): void => {
     setIsWrongPassword(false);
     setIsUserNotFound(false);
-    const { e_mail, password } = values;
+    const { email, password } = values;
 
-    signInWithEmailAndPassword(auth, e_mail, password)
-      .then((userCred) => {
-        console.log('userCred=', userCred);
+    signInWithEmailAndPassword(auth, email, password)
+      .then(() => {
         navigate('/');
       })
       .catch((err) => {
-        console.log('err=', err);
         if (err.message.includes('wrong-password')) {
           setIsWrongPassword(true);
         }

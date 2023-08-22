@@ -1,12 +1,32 @@
+import { TTripData } from './route.model';
+
 export interface ISignInFormValues {
-  e_mail: string;
+  email: string;
   password: string;
 }
 
 export interface ISignUpFormValues extends ISignInFormValues {
   repeat_password: string;
+  prefix: string;
+  phone: string;
+  name: string;
 }
 
 export type TAuthState = {
-  authToken: string;
+  userId: string;
+};
+
+export type TUserData = {
+  userId: string;
+  email: string;
+  name: string;
+  phone: string;
+};
+
+export type TNewUserData = {
+  [key: string]: string;
+};
+
+export type TUpdatedUserTrips = {
+  [key: string]: TTripData;
 };

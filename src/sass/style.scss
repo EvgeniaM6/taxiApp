@@ -1,8 +1,7 @@
-// body {
-//   background-color: #7961b6;
-// }
+@import './abstract/constants';
 
 @import './components/slide';
 @import './components/header';
 @import './components/mapMarker';
 @import './components/mapBar';
+@import './components/logo';

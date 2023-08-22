@@ -1,5 +1,5 @@
 import { Radio, RadioChangeEvent } from 'antd';
-import { carClassesObj } from '../../../constants';
+import { CAR_CLASSES_OBJ } from '../../../constants';
 import { TCarClassObj } from '../../models';
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import { setCarClass } from '../../store/routeSlice';
@@ -14,8 +14,8 @@ export const CarClassChoice = () => {
 
   return (
     <Radio.Group onChange={chooseCarClass} value={carClass}>
-      {Object.keys(carClassesObj).map((carClassKey) => {
-        const carClassObj: TCarClassObj = carClassesObj[carClassKey];
+      {Object.keys(CAR_CLASSES_OBJ).map((carClassKey) => {
+        const carClassObj: TCarClassObj = CAR_CLASSES_OBJ[carClassKey];
         return (
           <Radio.Button value={carClassKey} key={carClassKey}>
             {carClassObj.title}

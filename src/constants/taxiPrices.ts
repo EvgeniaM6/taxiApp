@@ -1,10 +1,10 @@
 import { TCarClassesObj } from '../script/models';
 
-export const metersInKm = 1000;
+export const METERS_IN_KM = 1000;
 
-export const currencyExchUahInUsd = 30;
+export const CURRENCY_EXCH_UAH_IN_USD = 30;
 
-export const carClassesObj: TCarClassesObj = {
+export const CAR_CLASSES_OBJ: TCarClassesObj = {
   econom: {
     title: 'Econom',
     priceUsdPerKm: 0.35,

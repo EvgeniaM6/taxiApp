@@ -26,6 +26,14 @@ export const navLinksArr = [
     key: 'authorization',
   },
   {
+    label: (
+      <NavLink to="/account" className="header__link">
+        My account
+      </NavLink>
+    ),
+    key: 'account',
+  },
+  {
     label: <button className="header__link btn-logout">Log out</button>,
     key: 'signout',
   },

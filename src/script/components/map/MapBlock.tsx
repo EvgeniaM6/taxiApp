@@ -1,37 +1,27 @@
-import {
-  LatLngExpression,
-  LeafletEventHandlerFnMap,
-  DivIcon,
-  LatLng,
-  LeafletMouseEvent,
-} from 'leaflet';
+import { LatLngExpression, LatLng } from 'leaflet';
 import { useState } from 'react';
-import { MapContainer, Marker, Popup, TileLayer } from 'react-leaflet';
+import { MapContainer, TileLayer } from 'react-leaflet';
 import { FinishPointMarker } from './FinishPointMarker';
-import { renderToString } from 'react-dom/server';
-import { EnvironmentFilled } from '@ant-design/icons';
-import { metersInKm, primaryAppColor } from '../../../constants';
+import { KYIV_POSITION, METERS_IN_KM } from '../../../constants';
 import MapRouting from './MapRouting';
-import { LocationPopup } from './LocationPopup';
 import { useAppDispatch, useAppSelector } from '../../hooks';
-import { setDistanceInKms, setFinishPoint, setStartPoint } from '../../store/routeSlice';
-
-const iconHtmlString = renderToString(
-  <EnvironmentFilled
-    style={{ color: primaryAppColor, transform: 'translate(0px, -25px) scale(3.5)' }}
-  />
-);
-const icon: DivIcon = new DivIcon({ html: iconHtmlString });
+import {
+  setDistanceInKms,
+  setFinishPoint,
+  setStartPoint,
+  setStartAddress,
+  setFinishAddress,
+} from '../../store/routeSlice';
+import { StartPointMarker } from './StartPointMarker';
 
 export const MapBlock = () => {
   const mapStyle: React.CSSProperties = {
     height: '500px',
   };
 
-  const { startPoint, finishPoint } = useAppSelector((state) => state.route);
+  const { startPoint, finishPoint, canBuildRoute } = useAppSelector((state) => state.route);
   const dispatch = useAppDispatch();
   const [position, setPosition] = useState<LatLngExpression | null>(null);
-  const [canBuildRoute, setCanBuildRoute] = useState(!!startPoint && !!finishPoint);
 
   const changeStartPosition = (newPosition: LatLngExpression): void => {
     setPosition(newPosition);
@@ -39,7 +29,7 @@ export const MapBlock = () => {
     dispatch(setStartPoint({ lat, lng }));
   };
 
-  const succ: PositionCallback = (pos) => {
+  const successFoundPosition: PositionCallback = (pos) => {
     const { latitude, longitude } = pos.coords;
     const newPosition = new LatLng(latitude, longitude);
 
@@ -54,49 +44,45 @@ export const MapBlock = () => {
 
     changeStartPosition(newPosition);
   };
-  navigator.geolocation.getCurrentPosition(succ);
 
-  const dragLocation: LeafletEventHandlerFnMap = {
-    mousedown: (): void => setCanBuildRoute(false),
-    mouseup: (event: LeafletMouseEvent): void => {
-      const { lat, lng } = event.latlng;
-      dispatch(setStartPoint({ lat, lng }));
-      setCanBuildRoute(true);
-    },
+  const notFoundPosition: PositionErrorCallback = () => {
+    setPosition(KYIV_POSITION);
   };
 
+  navigator.geolocation.getCurrentPosition(successFoundPosition, notFoundPosition);
+
   const changeDistanceInKm = (distance: number): void => {
-    dispatch(setDistanceInKms(distance / metersInKm));
+    dispatch(setDistanceInKms(distance / METERS_IN_KM));
   };
 
   const changeStartPoint = (lat: number, lng: number): void => {
+    if (lat === startPoint?.lat && lng === startPoint.lng) return;
     dispatch(setStartPoint({ lat, lng }));
   };
 
   const changeFinishPoint = (lat: number, lng: number): void => {
+    if (lat === finishPoint?.lat && lng === finishPoint.lng) return;
     dispatch(setFinishPoint({ lat, lng }));
+  };
+
+  const changeStartAddress = (address: string): void => {
+    dispatch(setStartAddress(address));
+  };
+
+  const changeFinishAddress = (address: string): void => {
+    dispatch(setFinishAddress(address));
   };
 
   return (
     <>
       {position && (
-        <MapContainer center={position} zoom={13} scrollWheelZoom={false} style={mapStyle}>
+        <MapContainer center={position} zoom={13} scrollWheelZoom style={mapStyle}>
           <TileLayer
             attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
             url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
           />
-          {!startPoint && (
-            <>
-              <Marker position={position} icon={icon} />
-              <LocationPopup position={position} setCanBuildRoute={setCanBuildRoute} />
-            </>
-          )}
-          {startPoint && (
-            <Marker position={startPoint} draggable eventHandlers={dragLocation} icon={icon}>
-              <Popup>From</Popup>
-            </Marker>
-          )}
-          <FinishPointMarker setCanBuildRoute={setCanBuildRoute} />
+          <StartPointMarker position={position} />
+          <FinishPointMarker />
           {startPoint && finishPoint && canBuildRoute && (
             <MapRouting
               startPoint={startPoint}
@@ -104,6 +90,8 @@ export const MapBlock = () => {
               changeDistanceInKm={changeDistanceInKm}
               changeStartPoint={changeStartPoint}
               changeFinishPoint={changeFinishPoint}
+              changeStartAddress={changeStartAddress}
+              changeFinishAddress={changeFinishAddress}
             />
           )}
         </MapContainer>

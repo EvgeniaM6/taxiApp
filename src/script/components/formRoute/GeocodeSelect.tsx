@@ -3,14 +3,18 @@ import { LabeledValue } from 'antd/es/select';
 import { GeocodingResult } from 'leaflet-control-geocoder/dist/geocoders';
 import { useMemo, useRef, useState } from 'react';
 import { IGeocodeSelectProps, IGeocodeValue } from '../../models';
+import { setCanBuildRoute } from '../../store/routeSlice';
+import { useAppDispatch } from '../../hooks';
 
 export function GeocodeSelect<
   ValueType extends { key?: string; label: React.ReactNode; value: string | number },
->({ fetchOptions, setPoint, ...props }: IGeocodeSelectProps<ValueType>) {
+>({ fetchOptions, setPoint, setAddress, ...props }: IGeocodeSelectProps<ValueType>) {
   const [fetching, setFetching] = useState(false);
   const [options, setOptions] = useState<ValueType[]>([]);
   const [geocodeResults, setGeocodeResults] = useState<GeocodingResult[]>([]);
   const fetchRef = useRef(0);
+
+  const dispatch = useAppDispatch();
 
   const debounceFetcher = useMemo(() => {
     const loadOptions = (value: string) => {
@@ -38,18 +42,25 @@ export function GeocodeSelect<
   }, [fetchOptions]);
 
   const selectPoint = (value: string | number | LabeledValue) => {
+    dispatch(setCanBuildRoute(false));
     const selectedAdress = geocodeResults.find((val) => {
       return val.properties.place_id === (value as IGeocodeValue).value;
     });
 
     if (!selectedAdress) {
       setPoint(null);
+      setAddress('');
     } else {
       const {
         center: { lat, lng },
+        name,
       } = selectedAdress;
       setPoint({ lat, lng });
+      setAddress(name);
     }
+    setTimeout(() => {
+      dispatch(setCanBuildRoute(true));
+    }, 0);
   };
 
   return (
