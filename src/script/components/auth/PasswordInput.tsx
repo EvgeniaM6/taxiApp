@@ -22,7 +22,7 @@ export const PasswordInput = () => {
         },
         {
           message: t('errMessageUnsecuredPassword'),
-          pattern: /^(?=.*[0-9])(?=.*[!@#$%^&*_+-])(?=.*[a-zA-Z]).{6,}$/,
+          pattern: /^(?=.*[0-9])(?=.*[!@#$%^&*_+-])(?=.*[A-Z,А-Я,a-z,а-я]).{6,}$/,
         },
       ]}
     >
