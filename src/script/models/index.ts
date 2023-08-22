@@ -6,6 +6,7 @@ import {
   TUpdatedUserTrips,
   TUserData,
 } from './auth.model';
+import { TNavLinkObj } from './header.model';
 import {
   IGeocodeSelectProps,
   IGeocodeValue,
@@ -35,4 +36,5 @@ export {
   TUpdatedUserTrips,
   TTripsTableData,
   TTripsFilterData,
+  TNavLinkObj,
 };
