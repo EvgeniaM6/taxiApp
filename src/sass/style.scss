@@ -1,7 +1,11 @@
 @import './abstract/constants';
+@import './abstract/mixins';
 
 @import './components/slide';
 @import './components/header';
 @import './components/mapMarker';
 @import './components/mapBar';
 @import './components/logo';
+@import './components/footer';
+
+@import './layouts/main';

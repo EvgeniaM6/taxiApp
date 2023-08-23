@@ -11,11 +11,6 @@ import { Footer } from 'antd/es/layout/layout';
 
 const { Header, Content } = Layout;
 
-const contentStyleObj: React.CSSProperties = {
-  backgroundColor: '#fff',
-  padding: '5px 50px 0',
-};
-
 export const App = () => {
   const [user] = useAuthState(auth);
   const navigate = useNavigate();
@@ -42,7 +37,7 @@ export const App = () => {
           <Header className="header">
             <HeaderElem />
           </Header>
-          <Content style={contentStyleObj}>
+          <Content className="main">
             <Routes>
               <Route path="/" element={<Welcome />} />
               <Route path="/route" element={<Main />} />
@@ -51,7 +46,7 @@ export const App = () => {
               <Route path="*" element={<ErrorPage />} />
             </Routes>
           </Content>
-          <Footer>
+          <Footer className="footer">
             <FooterElem />
           </Footer>
         </Layout>

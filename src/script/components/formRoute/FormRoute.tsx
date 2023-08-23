@@ -148,7 +148,7 @@ export const FormRoute = () => {
   return (
     <>
       <Form
-        labelCol={{ span: 2 }}
+        labelCol={{ xs: { span: 2 }, sm: { span: 4 }, xl: { span: 2 } }}
         wrapperCol={{ xs: { span: 16 }, lg: { span: 8 } }}
         onFinish={showModal}
       >
@@ -183,10 +183,10 @@ export const FormRoute = () => {
             setAddress={changeFinishAddress}
           />
         </Item>
-        <Item wrapperCol={{ offset: 2 }}>
+        <Item wrapperCol={{ xs: { offset: 0 }, sm: { offset: 4 }, xl: { offset: 2 } }}>
           <RouteCost />
         </Item>
-        <Item wrapperCol={{ offset: 2 }}>
+        <Item wrapperCol={{ xs: { offset: 0 }, sm: { offset: 4 }, xl: { offset: 2 } }}>
           <Button type="primary" htmlType="submit" disabled={!canOrderTaxi}>
             {t('btnOrderTaxi')}
           </Button>

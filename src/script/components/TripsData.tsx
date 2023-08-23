@@ -108,7 +108,7 @@ export const TripsData = (props: { userTrips: TUpdatedUserTrips | null; isLoadin
 
   return (
     <div>
-      <Table dataSource={dataSource} columns={columns} loading={isLoading} />
+      <Table dataSource={dataSource} columns={columns} loading={isLoading} scroll={{ x: 750 }} />
     </div>
   );
 };

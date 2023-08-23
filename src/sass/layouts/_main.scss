@@ -1,0 +1,12 @@
+.main {
+  background-color: #fff;
+  padding: 5px 50px 0;
+
+  @include media-tablet {
+    padding: 5px 20px 0;
+  }
+
+  @include media-mobile {
+    padding: 5px 10px 0;
+  }
+}
