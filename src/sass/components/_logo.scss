@@ -8,9 +8,25 @@
 
   &-first {
     color: $color-primary;
+
+    @include media-tablet {
+      font-size: 27px;
+    }
+
+    @include media-mobile {
+      font-size: 20px;
+    }
   }
 
   &-second {
     color: $color-secondary;
+
+    @include media-tablet {
+      font-size: 27px;
+    }
+
+    @include media-mobile {
+      font-size: 20px;
+    }
   }
 }

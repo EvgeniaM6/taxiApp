@@ -40,7 +40,7 @@ export const SignIn = () => {
     <Form
       form={formElem}
       labelWrap
-      labelCol={{ span: 2 }}
+      labelCol={{ xs: { span: 2 }, sm: { span: 4 }, xl: { span: 2 } }}
       wrapperCol={{ xs: { span: 16 }, lg: { span: 8 } }}
       onFinish={submitSignIn}
     >
@@ -62,7 +62,7 @@ export const SignIn = () => {
           allowClear
         />
       </Item>
-      <Item wrapperCol={{ offset: 2 }}>
+      <Item wrapperCol={{ xs: { offset: 0 }, sm: { offset: 4 }, xl: { offset: 2 } }}>
         <Space>
           <Button type="primary" htmlType="submit">
             {t('btnSignIn')}

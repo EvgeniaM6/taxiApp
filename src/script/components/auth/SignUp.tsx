@@ -46,7 +46,7 @@ export const SignUp = () => {
       initialValues={{ prefix: '38' }}
       form={formElem}
       labelWrap
-      labelCol={{ span: 2 }}
+      labelCol={{ xs: { span: 2 }, sm: { span: 4 }, xl: { span: 2 } }}
       wrapperCol={{ xs: { span: 16 }, lg: { span: 8 } }}
       onFinish={submitSignUp}
     >
@@ -55,7 +55,7 @@ export const SignUp = () => {
       <RepeatPasswordInput />
       <NameInput />
       <PhoneInput />
-      <Item wrapperCol={{ offset: 2 }}>
+      <Item wrapperCol={{ xs: { offset: 0 }, sm: { offset: 4 }, xl: { offset: 2 } }}>
         <Space>
           <Button type="primary" htmlType="submit">
             {t('btnSignUp')}
