@@ -46,7 +46,7 @@ export const App = () => {
               <Route path="*" element={<ErrorPage />} />
             </Routes>
           </Content>
-          <Footer>
+          <Footer className="footer">
             <FooterElem />
           </Footer>
         </Layout>
